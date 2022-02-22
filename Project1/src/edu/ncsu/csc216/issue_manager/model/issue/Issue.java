@@ -16,10 +16,10 @@ public class Issue {
 	public static final String I_ENHANCEMENT = "Enhancement";
 	public static final String I_BUG = "Bug"; 
 	public static final String NEW_NAME = "New";
-	public static final String NEW_CONFIRMED = "Confirmed";
-	public static final String NEW_WORKING = "Working";
-	public static final String NEW_VERIFYING = "Verifying";
-	public static final String NEW_CLOSED = "Closed"; 
+	public static final String CONFIRMED_NAME = "Confirmed";
+	public static final String WORKING_NAME = "Working";
+	public static final String VERIFYING_NAME = "Verifying";
+	public static final String CLOSED_NAME = "Closed"; 
 	private int issueId; 
 	private String summary;
 	private String owner; 
