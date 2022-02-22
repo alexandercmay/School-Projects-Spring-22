@@ -88,7 +88,7 @@ public class Issue {
 		return null;
 	}
 	
-	public String getSumnmary() {
+	public String getSummary() {
 		return null;
 	}
 	
