@@ -38,7 +38,7 @@ public class IssueManager {
 		return null;
 	}
 	
-	public void executeCommadn(int id, Command command) {
+	public void executeCommand(int id, Command command) {
 		
 	}
 	
