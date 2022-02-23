@@ -6,42 +6,92 @@ import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
+/**
+ * Maintains a list of issues using ArrayLists. 
+ * Maintins a counter which represents the id of the next issue to be added to the list
+ * @author Alexander May
+ *
+ */
 public class IssueList {
 
+	/** Represents the id of the next issue to be added to the list **/
 	private int counter;
 	
+	/**
+	 * The constructor for a new IssueList. Issue counter is reset to 1 when a new list is created. 
+	 */
 	public IssueList() {
 		
 	}
 	
+	/**
+	 * Adds an issue to the list. 
+	 * @param issue    the type of issue that you want to add (eg enhancement, bug)
+	 * @param summary  the summary of the issue as a string 
+	 * @param note     the note tied to the issue as a string
+	 * @return id      returns the id of the issue as an int
+	 */
 	public int addIssue(IssueType issue, String summary, String note) {
 		 return 0;
 	}
 	
+	/**
+	 * Adds issues (plural) to the list based on a passed through ArrayList.
+	 * Adds the issues in a sorted order. 
+	 * Counter is set to last id + 1
+	 * @param issues the ArrayList of issues being read in 
+	 */
 	public void addIssues(ArrayList<Issue> issues) {
 		
 	}
 	
+	/**
+	 * Adds a single issue to the list
+	 * @param issue the issue object to add to the list
+	 */
 	private void addIssue(Issue issue) {
 		
 	}
 	
+	/**
+	 * Grabs the list of all current issues as an ArrayList 
+	 * @return the Issue ArrayList
+	 */
 	public ArrayList<Issue> getIssues(){
 		return null;
 	}
 	
+	/**
+	 * Returns an ArrayList of issues of a certain type (eg enhancement, bug)
+	 * @param issue the type of issue you want to filter for
+	 * @return issues by their type in an ArrayList
+	 */
 	public ArrayList<Issue> getIssuesByType(String issue){
 		return null;
 	}
 	
+	/**
+	 * Returns a specific issue based off of a specific ID
+	 * @param id the ID to find amongst the list of issues
+	 * @return the Issue associated with the specified ID
+	 */
 	public Issue getIssueById(int id) {
 		return null;
 	}
 	
+	/**
+	 * Executes a desired command based on the id of the issue and the specified command
+	 * @param id        the ID of the issue sought after
+	 * @param command   the command the user wants to execute upon the issue
+	 */
 	public void executeCommand(int id, Command command) {
 		
 	}
 	
+	/**
+	 * Deletes a specified issue based on the ID
+	 * @param id the ID attached to the issue the user is seeking to delete
+	 */
 	public void deleteIssueById(int id) {
 		
 	}
