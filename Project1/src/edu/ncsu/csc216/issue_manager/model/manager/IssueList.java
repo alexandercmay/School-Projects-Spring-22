@@ -8,7 +8,7 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
 /**
  * Maintains a list of issues using ArrayLists. 
- * Maintins a counter which represents the id of the next issue to be added to the list
+ * Maintains a counter which represents the id of the next issue to be added to the list
  * @author Alexander May
  *
  */

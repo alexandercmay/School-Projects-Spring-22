@@ -61,9 +61,10 @@ public class IssueManager {
 	
 	/**
 	 * Returns the issues where rows are Issues and columns are   0: ID   1: state name  2: type  3: summary
+	 * @param issue the String representing the issue type 
 	 * @return return a 2D Object array containing issues of a certain type
 	 */
-	public Object[][] getIssueListAsArrayByIssueType(String isssue){
+	public Object[][] getIssueListAsArrayByIssueType(String issue){
 		return null;
 	}
 	

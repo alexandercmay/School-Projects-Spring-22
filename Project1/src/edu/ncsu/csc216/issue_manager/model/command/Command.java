@@ -21,23 +21,24 @@ public class Command {
 	 */
 	public enum Resolution { FIXED, DUPLICATE, WONTFIX, WORKSFORME }
 
-	// A constant string for the “Fixed” resolution.
+	/** A constant string for the “Fixed” resolution. **/
 	public static final String R_FIXED = "Fixed";
-	// A constant string for the “Duplicate” resolution.
+	/** A constant string for the “Duplicate” resolution. **/
 	public static final String R_DUPLICATE = "Duplicate";
-	// A constant string for the “WontFix” resolution.
+	/** A constant string for the “WontFix” resolution. **/
 	public static final String R_WONTFIX = "WontFix";
-	// A constant string for the “WorksForMe” resolution.
+	/** A constant string for the “WorksForMe” resolution. **/
 	public static final String R_WORKSFORME = "WorksForMe"; 
-	// the id of the owner of the issue
+	/** the id of the owner of the issue **/
 	private String ownerId; 
-	// the note attached to a given issue
+	/** the note attached to a given issue **/
 	private String note; 
 	
-	/*
-	 * The constructor for the command 
+	/**
+	 * The constructor for the command
 	 * @param cv        the CommandValue from the enumerations in CommandValue
 	 * @param ownerId   the owner ID of the given issue
+	 * @param r         the resolution type
 	 * @param note      the note for the given issue
 	 */
 	public Command(CommandValue cv, String ownerId, Resolution r, String note) {
