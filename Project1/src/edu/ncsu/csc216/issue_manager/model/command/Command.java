@@ -33,6 +33,10 @@ public class Command {
 	private String ownerId; 
 	/** the note attached to a given issue **/
 	private String note; 
+	/** The commandValue for the command **/
+	private CommandValue commandValue;
+	/** The resolution for the command **/
+	private Resolution resolution;
 	
 	/**
 	 * The constructor for the command
@@ -40,10 +44,31 @@ public class Command {
 	 * @param ownerId   the owner ID of the given issue
 	 * @param r         the resolution type
 	 * @param note      the note for the given issue
+	 * @throws IllegalArgumentException if cv is null
+	 * @throws IllegalArgumentException if cv is ASSIGN and there is now owner id 
+	 * @throws IllegalArgumentException if cv is RESOLVE and resolution is null
+	 * @throws IllegalArgumentException if there is no note
+	 * 
 	 */
 	public Command(CommandValue cv, String ownerId, Resolution r, String note) {
+		// error checking for parameters
+		if (cv == null) {
+			throw new IllegalArgumentException("Invalid information.");
+		} 
+		if (cv == CommandValue.ASSIGN && ("".equals(ownerId) || ownerId == null)) {
+			throw new IllegalArgumentException("Invalid information.");
+		}
+		if (cv == CommandValue.RESOLVE && r == null) {
+			throw new IllegalArgumentException("Invalid information.");
+		}
+		if (note == null || "".equals(note)) {
+			throw new IllegalArgumentException("Invalid information.");
+		}
 		this.ownerId = ownerId;
 		this.note = note;	
+		this.commandValue = cv;
+		this.resolution = r;
+		
 	}
 	
 	/**
@@ -51,7 +76,7 @@ public class Command {
 	 * @return CommandValue from the enumerations apt for the situation 
 	 */
 	public CommandValue getCommand() {
-		return null; 
+		return commandValue;
 	}
 	
 	/**
@@ -67,7 +92,7 @@ public class Command {
 	 * @return Resolution the resolution associated with the issue
 	 */
 	public Resolution getResolution() {
-		return null; 
+		return resolution; 
 	}
 	
 	/**
