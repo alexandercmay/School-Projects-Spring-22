@@ -8,7 +8,7 @@ import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 
 /**
- * The test file to ensure the proper function of Command
+ * The test file to ensure the proper function of Command.
  * @author Alexander May
  *
  */

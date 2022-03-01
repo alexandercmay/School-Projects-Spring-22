@@ -3,6 +3,7 @@ package edu.ncsu.csc216.issue_manager.model.issue;
 import java.util.ArrayList;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
+import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 
 /**
  * The Issue class that contains the 5 states in addition to the object properties and fields of Issues
@@ -41,7 +42,13 @@ public class Issue {
 	/** True if the issue is confirmed. The confirmed field can only be set to true if the issue is a bug. **/
 	private boolean confirmed; 
 	/** An ArrayList of notes in the form of Strings**/
-	private ArrayList<String> note; 
+	private ArrayList<String> notes; 
+	/** The issue type of the current issue **/
+	private IssueType issueType; 
+	/** The resolution of the issue **/
+	private Resolution resolution;
+	/** The Issue's state **/
+	private String issueState;
 	
 	/**
 	 * The constructor that uses the id, type, summary, and note
@@ -49,9 +56,20 @@ public class Issue {
 	 * @param issueType    the Issue type
 	 * @param summary      the summary of the Issue
 	 * @param note         the Issue's note
+	 * @throws IllegalArgumentException if any of the parameters are null or empty string, or if the id is less than 1
 	 */
 	public Issue(int id, IssueType issueType, String summary, String note) {
-			
+		// try to use Issue setters to set the fields 
+		try {
+			String issueTypeString = issueType.toString();
+			setIssueId(id);
+			setIssueType(issueTypeString);
+			setSummary(summary);
+			setNotes(notes);
+		// if any of the fields cannot be set with given parameters
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Issue cannot be created.");
+		}
 	}
 	
 	/**
@@ -64,34 +82,90 @@ public class Issue {
 	 * @param confirmed    true if the Issue is confirmed
 	 * @param resolution   the resolution of the Issue (fixed, duplicate, wontFix, worksForMe)
 	 * @param notes        the notes of the Issue
+	 * @throws IllegalArgumnetException if the inputs are invalid
 	 */
 	public Issue(int id, String state, String issueType, String summary,
 			String owner, boolean confirmed, String resolution, ArrayList<String> notes) {
+		// try to use Issue setters to set the fields 
+		try {
+			setIssueId(id);
+			setState(state);
+			setIssueType(issueType);
+			setSummary(summary);
+			setOwner(owner);
+			setConfirmed(confirmed);
+			setResolution(resolution);
+			setNotes(notes);
+		// if any of the fields cannot be set with given parameters
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Issue cannot be created.");
+		}
 		
 	}
 	
 	/**
 	 * Sets the ID of the issue
 	 * @param issueId the int to set to the ID
+	 * @throws IllegalArgumentException if the id is less than 1
 	 */
 	private void setIssueId(int issueId) {
-		
+		// throw if the id is less than 1
+		if(issueId < 1) {
+			throw new IllegalArgumentException("Invalid id");
+		} else {
+			this.issueId = issueId;
+		}
 	}
 	
 	/**
 	 * Sets the state of the Issue (new, working, confirmed, verifying, closed) 
 	 * @param state the String for the Issue state
+	 * @throws IllegalArgumentException if the state is null or empty 
+	 * @throws IllegalArgumentException if the state is an unrecognized type
 	 */
 	private void setState(String state) {
-		
+		if (state == null || "".equals(state)) {
+			throw new IllegalArgumentException("Invalid state.");
+		} else {
+			if(NEW_NAME.equalsIgnoreCase(state)) {
+				this.issueState = NEW_NAME;
+			} else if (CONFIRMED_NAME.equalsIgnoreCase(state)) {
+				this.issueState = CONFIRMED_NAME;
+			} else if (WORKING_NAME.equalsIgnoreCase(state)) {
+				this.issueState = WORKING_NAME;
+			} else if (VERIFYING_NAME.equalsIgnoreCase(state)) {
+				this.issueState = VERIFYING_NAME;
+			} else if (CLOSED_NAME.equalsIgnoreCase(state)) {
+				this.issueState = CLOSED_NAME;
+			} else {
+				throw new IllegalArgumentException("Invalid state.");
+			}
+		}
 	}
 	
 	/**
 	 * Sets the type for the issue (bug, enhancement)
 	 * @param type the type of Issue as a String
+	 * @throws IllegalArgumnetException if the type is not an enhancement or a bug
+	 * @throws IllegalArgumentException if the type is enhancement and the state is confirmed
 	 */
 	private void setIssueType(String type) {
-		
+		// throw if the type is enhancement and the state is confirmed
+		if(I_ENHANCEMENT.equalsIgnoreCase(type) && issueState.equalsIgnoreCase(CONFIRMED_NAME)) {
+			throw new IllegalArgumentException("Invalid type for state.");
+		}
+		// if the string is a bug
+		else if (I_BUG.equalsIgnoreCase(type)) {
+			this.issueType = IssueType.BUG; 
+		} 
+		// if the string is enhancement
+		else if (I_ENHANCEMENT.equalsIgnoreCase(type)) {
+			this.issueType = IssueType.ENHANCEMENT;
+		}
+		// otherwise throw an exception
+		else {
+			throw new IllegalArgumentException("Invalid issue type.");
+		}
 	}
 	
 	/**
@@ -99,31 +173,96 @@ public class Issue {
 	 * @param summary the summary as a String
 	 */
 	private void setSummary(String summary) {
-		
-	}
+		// cannot contain a comma
+		if (summary.contains(",")) {
+			throw new IllegalArgumentException("Cannot contain comma.");
+		} else {
+			// otherwise set the summary to the parameter
+			this.summary = summary;
+		}
+	} 
 	
 	/**
 	 * Sets the Issue's owner
 	 * @param owner the Issue's owner as a String
 	 */
 	private void setOwner(String owner) {
+		// working or verifying MUST have owner
+		if(issueState.equalsIgnoreCase(WORKING_NAME) || issueState.equalsIgnoreCase(VERIFYING_NAME)) {
+			if(owner == null || "".equals(owner)) {
+				throw new IllegalArgumentException("Must have an owner for verifying or working.");
+			}
+		}
+		// New and Confirmed must not have an owner
+		else if(issueState.equalsIgnoreCase(NEW_NAME) || issueState.equalsIgnoreCase(CONFIRMED_NAME)) {
+			if(owner != null && !("".equals(owner))) {
+				throw new IllegalArgumentException("Must not have an owner if new or confirmed.");
+			}
+		}
+		
+		else {
+			this.owner = owner;
+		}
 		
 	}
 	
 	/**
 	 * Sets the state to confirmed (T/F)
 	 * @param confirmed the boolean value. True if confirmed. 
+	 * @throws IllegalArgumentException if enhancement or new while confirmed is true
 	 */
 	private void setConfirmed(boolean confirmed) {
-		
+		// if the type is enhancement, the state is new, and the confirmed is true, throw IAE
+		if((issueState.equalsIgnoreCase(NEW_NAME) || getIssueType().equalsIgnoreCase(I_ENHANCEMENT)) && confirmed == true) {
+			throw new IllegalArgumentException("Cannot be confirmed in current state.");
+		} 
+		// if the state is working but not confirmed
+		else if (issueState.equalsIgnoreCase(WORKING_NAME) && !confirmed) {
+			throw new IllegalArgumentException("Cannot be confirmed in current state.");
+		}
+		else {
+			this.confirmed = confirmed;
+		}
 	}
 	
 	/**
 	 * Sets the Issue's resolution
 	 * @param resolution the String identifying the resolution to set
+	 * @throws IllegalArgumentException if type is enhancement and resolution is works for me
+	 * @throws IllegalArgumentException if resolution is empty while in closed state
+	 * @throws IllegalArgumentException if resolution is not FIXED while in verifying
+	 * @throws IllegalArgumentException if the type is not WORKSFORME, DUPLICATE, WONTFIX, or FIXED
 	 */
 	private void setResolution(String resolution) {
-		
+		// throw if resolution is works for me and type is enhancement
+		if (getIssueType().equalsIgnoreCase("Enhancement") && "WORKSFORME".equalsIgnoreCase(resolution)) {
+			throw new IllegalArgumentException("Invalid resolution for type.");
+		}
+		// if resolution is empty while in closed state
+		else if (issueState.equalsIgnoreCase(CLOSED_NAME) && ("".equals(resolution) || null == resolution)) {
+			throw new IllegalArgumentException("Invalid resolution for type.");
+		}
+		// issues in Verifying state must be fixed
+		else if (issueState.equalsIgnoreCase(VERIFYING_NAME) && !(resolution.equalsIgnoreCase("FIXED"))) {
+			throw new IllegalArgumentException("Invalid resolution for type.");
+		}
+		else if (issueState.equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
+			return;
+		}
+		// otherwise determine the resolution type
+		else {
+			if (resolution.equalsIgnoreCase("WORKSFORME")) {
+				this.resolution = Resolution.WORKSFORME;
+			} else if (resolution.equalsIgnoreCase("WONTFIX")) {
+				this.resolution = Resolution.WONTFIX;
+			} else if (resolution.equalsIgnoreCase("DUPLICATE")) {
+				this.resolution = Resolution.DUPLICATE;
+			} else if (resolution.equalsIgnoreCase("FIXED")){
+				this.resolution = Resolution.FIXED;
+			} else {
+				throw new IllegalArgumentException("Invalid resolution.");
+			}
+		}
 	}
 	
 	/**
@@ -131,7 +270,11 @@ public class Issue {
 	 * @param notes the ArrayList of notes in the form of String for an Issue
 	 */
 	private void setNotes(ArrayList<String> notes) {
-		
+		// if notes is empty
+		if (notes.isEmpty()) {
+			throw new IllegalArgumentException("Notes cannot be empty");
+		}
+		this.notes = notes;
 	}
 	
 	/**
@@ -155,7 +298,7 @@ public class Issue {
 	 * @return type as a String
 	 */
 	public String getIssueType() {
-		return null;
+		return issueType.toString();
 	}
 	
 	/**
@@ -228,7 +371,7 @@ public class Issue {
 	@Override
 	public String toString() {
 		return "Issue [issueId=" + issueId + ", summary=" + summary + ", owner=" + owner + ", confirmed=" + confirmed
-				+ ", note=" + note + "]";
+				+ ", note=" + notes + "]";
 	}
 
 

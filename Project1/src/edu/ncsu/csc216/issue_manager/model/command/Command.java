@@ -48,7 +48,6 @@ public class Command {
 	 * @throws IllegalArgumentException if cv is ASSIGN and there is now owner id 
 	 * @throws IllegalArgumentException if cv is RESOLVE and resolution is null
 	 * @throws IllegalArgumentException if there is no note
-	 * 
 	 */
 	public Command(CommandValue cv, String ownerId, Resolution r, String note) {
 		// error checking for parameters
