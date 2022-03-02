@@ -485,6 +485,7 @@ public class Issue {
 		  * @throws UnsupportedOperationException if trying to assign an owner on a bug
 		  * @throws UnsupportedOperationException if trying to confirm an enhancement
 		  * @throws UnsupportedOperationException if trying to set resolution WORKSFORME to enhancement
+		  * @throws UnsupportedOperationException if trying to do anything except verify, confirm, or resolve
 		  */
 		 @Override 
 		 public void updateState(Command c) {
@@ -494,6 +495,7 @@ public class Issue {
 				 // if the issue is an enhancement
 				 if(issueType == IssueType.ENHANCEMENT) {
 					 owner = c.getOwnerId();
+					 state = new WorkingState();
 				 } else {
 					 // throw if trying to assign an owner on a bug from new
 					 throw new UnsupportedOperationException("Invalid information.");
@@ -522,6 +524,10 @@ public class Issue {
 				 catch (Exception e) {
 					 throw new UnsupportedOperationException("Invalid information.");
 				 }
+			 }
+			 // if not a supported command
+			 else {
+				 throw new UnsupportedOperationException("Invalid information.");
 			 }
 			 
 			 addNote(c.getNote());

@@ -1,5 +1,6 @@
 package edu.ncsu.csc216.issue_manager.model.issue;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
+import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
@@ -203,8 +205,8 @@ class IssueTest {
 	public void testValidShortConstructor() {
 		
 		// issue valid 
-				Issue issue5 = assertDoesNotThrow(
-						() -> new Issue(1, IssueType.BUG, "bugs or humans", "bugs and humans are the same"));
+		Issue issue5 = assertDoesNotThrow(
+				() -> new Issue(1, IssueType.BUG, "bugs or humans", "bugs and humans are the same"));
 		
 		
 	}
@@ -232,14 +234,55 @@ class IssueTest {
 	/**
 	 * Tests valid commands for state changes
 	 */
-	public void testValidCommands() {
-		//Issue issue1 = new Issue()
+	public void testValidCommandsNew() {
+		// create a new bug and test possible valid path
+		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");
+		// confirm the bug
+		Command command1 = new Command(CommandValue.CONFIRM, "", null, "lets get working on this bug");
+		// assign the bug an owner
+		Command command2 = new Command(CommandValue.ASSIGN, "alex", null, "get to it alex");
+		// owner declares it fixed
+		Command command3 = new Command(CommandValue.RESOLVE, "alex", Resolution.FIXED, "i think it be fixed now");
+		// verfied as fixed
+		Command command4 = new Command(CommandValue.VERIFY, "alex", Resolution.FIXED, "it be fixed now");
+		
+		try {
+			issue1.update(command1);
+			// make sure state is now confirmed
+			assertTrue(issue1.getStateName().equalsIgnoreCase("confirmed"));
+			issue1.update(command2);
+			// make sure state is now working
+			assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
+			issue1.update(command3);
+			// make sure owner is alex
+			assertTrue(issue1.getOwner().equalsIgnoreCase("alex"));
+			issue1.update(command4);
+			// make sure resolution is fixed
+			assertTrue(issue1.getResolution().equalsIgnoreCase("fixed"));
+			
+		}
+		catch (Exception e) {
+			fail("Should not fail.");
+		}
+		
+		
+		
 	}
 	
 	/**
 	 * Tests invalid commands for state changes
 	 */
-	public void testInvalidCommands() {
+	public void testInvalidCommandsNew() {
+		// create a new bug and test possible valid path
+		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");
+		// cannot verify a new bug
+		Command command1 = new Command(CommandValue.VERIFY, "", null, "yeah i skipped some steps");
+		assertThrows(UnsupportedOperationException.class, () -> issue1.update(command1));
 		
+		// create an enhancement
+		Issue issue2 = new Issue(1, IssueType.ENHANCEMENT, "humane", "please be humane");
+		// cannot confirm an enhancement
+		Command command2 = new Command(CommandValue.CONFIRM, "", null, "yeah i see it");
+		assertThrows(UnsupportedOperationException.class, () -> issue2.update(command2));
 	}
 }
