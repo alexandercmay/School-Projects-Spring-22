@@ -63,9 +63,13 @@ public class Issue {
 		try {
 			String issueTypeString = issueType.toString();
 			setIssueId(id);
-			setIssueType(issueTypeString);
+			setState(state);
+			setIssueType(issueType);
 			setSummary(summary);
-			setNotes(notes);
+			setOwner(owner);
+			setConfirmed(confirmed);
+			setResolution(resolution);
+			addNote(note);
 		// if any of the fields cannot be set with given parameters
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Issue cannot be created.");
@@ -197,6 +201,8 @@ public class Issue {
 		else if(issueState.equalsIgnoreCase(NEW_NAME) || issueState.equalsIgnoreCase(CONFIRMED_NAME)) {
 			if(owner != null && !("".equals(owner))) {
 				throw new IllegalArgumentException("Must not have an owner if new or confirmed.");
+			} else {
+				this.owner = "";
 			}
 		}
 		
@@ -282,7 +288,7 @@ public class Issue {
 	 * @return ID as an int
 	 */ 
 	public int getIssueId() {
-		return 0;
+		return issueId;
 	}
 	
 	/**
@@ -290,7 +296,7 @@ public class Issue {
 	 * @return state as a String
 	 */
 	public String getStateName() {
-		return null; 
+		return issueState; 
 	}
 	
 	/**
@@ -298,7 +304,14 @@ public class Issue {
 	 * @return type as a String
 	 */
 	public String getIssueType() {
-		return issueType.toString();
+		// if the issue type is bug, return bug
+		if(issueType.toString().equalsIgnoreCase(I_BUG)){
+			return I_BUG;
+		} 
+		// otherwise return enhancement
+		else {
+			return I_ENHANCEMENT;
+		}
 	}
 	
 	/**
@@ -306,7 +319,13 @@ public class Issue {
 	 * @return resolution as a String
 	 */
 	public String getResolution() {
-		return null;
+		// return a string "" if state is new
+		if (issueState.equals(NEW_NAME)) {
+			return "";
+		} 
+		else {
+		return resolution.toString();
+		}
 	}
 	
 	/**
@@ -314,7 +333,7 @@ public class Issue {
 	 * @return the owner as a String
 	 */
 	public String getOwner() {
-		return null;
+		return owner;
 	}
 	
 	/**
@@ -322,7 +341,7 @@ public class Issue {
 	 * @return the summary as a String
 	 */
 	public String getSummary() {
-		return null;
+		return summary;
 	}
 	
 	/**
@@ -330,7 +349,7 @@ public class Issue {
 	 * @return an ArrayList of notes as Strings
 	 */
 	public ArrayList<String> getNotes(){
-		return null;
+		return notes;
 	}
 	
 	/**
@@ -338,7 +357,12 @@ public class Issue {
 	 * @return a single String containing an Issue's notes
 	 */
 	public String getNotesString() {
-		return null;
+		String notesString = "";
+		ArrayList<String> notes = getNotes();
+		for (int i = 0; i < notes.size(); i++) {
+			notesString += "-" + notes.get(i) + "\n";
+		}
+		return notesString;
 	}
 	
 	/**
@@ -346,15 +370,23 @@ public class Issue {
 	 * @return True if confirmed
 	 */
 	public boolean isConfirmed(){
-		return false;
+		return confirmed;
 	}
 	
 	/**
 	 * Adds a note to the Issue
 	 * @param note the note to add as a String
+	 * @throws IllegalArgumentException if the note is null or empty
 	 */
 	private void addNote(String note) {
-		
+		// note cannot be null or empty
+		if (note == null || "".equals(note)) {
+			throw new IllegalArgumentException("Note must have script.");
+		} else {
+			String noteAppended = "[" + getStateName() + "]";
+			noteAppended += note;
+			notes.add(noteAppended);
+		}
 	}
 	
 	/**
@@ -370,8 +402,18 @@ public class Issue {
 	 */
 	@Override
 	public String toString() {
-		return "Issue [issueId=" + issueId + ", summary=" + summary + ", owner=" + owner + ", confirmed=" + confirmed
-				+ ", note=" + notes + "]";
+		String issueString = "";
+		issueString += "* ";
+		issueString += getIssueId() + ",";
+		issueString += getStateName() + ","; 
+		issueString += getIssueType() + ",";
+		issueString += getSummary() + ",";
+		issueString += getOwner() + ",";
+		issueString += isConfirmed() + ",";
+		issueString += getResolution() + "\n"; 
+		issueString += getNotesString();
+		return issueString;
+		
 	}
 
 

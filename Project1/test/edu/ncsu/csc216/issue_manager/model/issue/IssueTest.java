@@ -165,9 +165,7 @@ class IssueTest {
 		// issue valid 
 		Issue issue5 = assertDoesNotThrow(
 				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
-		
-		
-				
+					
 		
 	}
 	
@@ -178,6 +176,26 @@ class IssueTest {
 	@Test
 	public void testValidShortConstructor() {
 		
+		
+	}
+	
+	/**
+	 * Test the addNote method 
+	 */
+	@Test
+	public void testAddNote() {
+		
 	}
 
+	/**
+	 * Tests the toString
+	 */
+	@Test
+	public void testToString() {
+		String exToString = "* 1,New,Enhancement,enhance image!,,false,\n-[New] Note 1\n";
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
+		Issue issue = new Issue(1, "NEW", "Enhancement", "enhance image!", "", false,"",notes);
+		assertEquals(exToString, issue.toString());
+	}
 }
