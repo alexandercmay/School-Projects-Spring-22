@@ -3,6 +3,7 @@ package edu.ncsu.csc216.issue_manager.model.issue;
 import java.util.ArrayList;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
+import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 
 /**
@@ -396,7 +397,24 @@ public class Issue {
 	 * @param c the Command to update the issue with
 	 */
 	public void update(Command c) {
-		
+		state.updateState(c);
+		// get state as string
+//		String state = getStateName();
+//		if (state.equalsIgnoreCase(NEW_NAME)) {
+//			
+//		} 
+//		else if (state.equalsIgnoreCase(CONFIRMED_NAME)) {
+//			
+//		}
+//		else if (state.equalsIgnoreCase(WORKING_NAME)) {
+//			
+//		}
+//		else if (state.equalsIgnoreCase(CONFIRMED_NAME)) {
+//			
+//		}
+//		else if (state.equalsIgnoreCase(CLOSED_NAME)) {
+//			
+//		}
 	}
 	
 	/**
@@ -464,10 +482,49 @@ public class Issue {
 		 /**
 		  * New can transition to working or confirmed or closed
 		  * @param c the Command to attempt to enact upon New
+		  * @throws UnsupportedOperationException if trying to assign an owner on a bug
+		  * @throws UnsupportedOperationException if trying to confirm an enhancement
+		  * @throws UnsupportedOperationException if trying to set resolution WORKSFORME to enhancement
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 // if the command value is assign
+			 if (c.getCommand() == CommandValue.ASSIGN) {
+				 
+				 // if the issue is an enhancement
+				 if(issueType == IssueType.ENHANCEMENT) {
+					 owner = c.getOwnerId();
+				 } else {
+					 // throw if trying to assign an owner on a bug from new
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 } 
+			 // if the command is to confirm
+			 else if (c.getCommand() == CommandValue.CONFIRM) {
+				 
+				 // if the issue is a bug
+				 if (issueType == IssueType.BUG) {
+					 setConfirmed(true);
+					 state = new ConfirmedState();
+				 } else {
+					// throw if trying to confirm an enhancement
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
 			 
+			 // if the command is to resolve
+			 else if (c.getCommand() == CommandValue.RESOLVE) {
+				 try {
+					 // set the resolution to the command's resolution
+					 setResolution(c.getResolution().toString());
+				 }
+				 // might catch an issue if setting worksforme to enhancement 
+				 catch (Exception e) {
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
+			 
+			 addNote(c.getNote());
 		 }
 		 
 		 /**
@@ -498,10 +555,30 @@ public class Issue {
 		 /**
 		  * Working can transition to Closed or Verifying
 		  * @param c the Command to attempt to enact upon Working
+		  * @throws UnsupportedOperationException if trying to set worksforme to enhancement
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 // if the resolution is fixed
+			 if (c.getResolution() == Resolution.FIXED) {
+				 // set to verifying
+				 state = new VerifyingState();
+			 } 
+			 // if resolution is not fixed
+			 else {
+				 try {
+					 setResolution(c.getResolution().toString());
+					// set to closed
+					 state = new ClosedState();
+				 }
+				 // might catch exception setting worksforme to an enhancement
+				 catch (Exception e) {
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
 			 
+			 //add the note
+			 addNote(c.getNote());
 		 }
 		 
 		 /**
@@ -529,10 +606,29 @@ public class Issue {
 		 /**
 		  * Confirmed can transition to Working or Closed
 		  * @param c the Command to attempt to enact upon Confirmed
+		  * @throws UnsupportedOperationException if not trying to assign an owner or resolving with wontfix
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 // if assign 
+			 if (c.getCommand() == CommandValue.ASSIGN) {
+				 // assign to an owner
+				 setOwner(c.getOwnerId());
+				 // update to working state
+				 state = new WorkingState();
+			 }
+			 else if ((c.getCommand() == CommandValue.RESOLVE) && c.getResolution() == Resolution.WONTFIX) {
+				 // set resolution to wontfix
+				 setResolution(c.getResolution().toString());
+				 // set state to closed
+				 state = new ClosedState();	 
+			 } 
+			 // throwing for any other case
+			 else {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 			 
+			 addNote(c.getNote());
 		 }
 		 
 		 /**
@@ -560,10 +656,27 @@ public class Issue {
 		 /**
 		  * Verifying can transition to Working or Closed
 		  * @param c the Command to attempt to enact upon Verifying
+		  * @throws UnsupportedOperationException if not verifying or reopening
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 // verified
+			 if (c.getCommand() == CommandValue.VERIFY) {
+				 // set to closed
+				 state = new ClosedState();
+			 }
 			 
+			 // reopened
+			 else if (c.getCommand() == CommandValue.REOPEN) {
+				 // set to working
+				 state = new WorkingState();
+			 }
+			 // otherwise throw 
+			 else {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
+			 // add note
+			 addNote(c.getNote());
 		 }
 		 
 		 /**
@@ -580,6 +693,7 @@ public class Issue {
 	 /**
 	  * Represents the "Closed" state that an issue can be in
 	  * @author Alexander May
+	  * @throws UnsupportedOperationException
 	  *
 	  */
 	 private class ClosedState implements IssueState {
@@ -594,7 +708,25 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 
+			 // reopened
+			 if (c.getCommand() == CommandValue.REOPEN) {
+				 // if enhancement w/ owner
+				 if((issueType == IssueType.ENHANCEMENT) && !(owner == null || "".equals(owner))){
+					 state = new WorkingState();
+				 }
+				 // bug, confirmed, w/ owner
+				 else if ((issueType == IssueType.BUG) && isConfirmed() && !(owner == null || "".equals(owner))) {
+					 state = new WorkingState();
+				 }
+				 // bug, confirmed, no owner
+				 else if ((issueType == IssueType.BUG) && isConfirmed() && (owner == null || "".equals(owner))){
+					 state = new ConfirmedState();
+				 // otherwise reopen as new
+				 } else {
+					 state = new NewState();
+				 }
+			 }
+			 addNote(c.getNote());
 		 }
 		 
 		 /**

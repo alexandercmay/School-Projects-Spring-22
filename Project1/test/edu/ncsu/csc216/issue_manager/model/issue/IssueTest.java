@@ -228,4 +228,18 @@ class IssueTest {
 		Issue issue = new Issue(1, "NEW", "Enhancement", "enhance image!", "", false,"",notes);
 		assertEquals(exToString, issue.toString());
 	}
+	
+	/**
+	 * Tests valid commands for state changes
+	 */
+	public void testValidCommands() {
+		//Issue issue1 = new Issue()
+	}
+	
+	/**
+	 * Tests invalid commands for state changes
+	 */
+	public void testInvalidCommands() {
+		
+	}
 }
