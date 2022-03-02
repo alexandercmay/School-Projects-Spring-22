@@ -48,7 +48,7 @@ public class Issue {
 	/** The resolution of the issue **/
 	private Resolution resolution;
 	/** The Issue's state **/
-	private String issueState;
+	private IssueState state;
 	
 	/**
 	 * The constructor that uses the id, type, summary, and note
@@ -61,16 +61,16 @@ public class Issue {
 	public Issue(int id, IssueType issueType, String summary, String note) {
 		// try to use Issue setters to set the fields 
 		try {
-			String issueTypeString = issueType.toString();
+			this.notes = new ArrayList<String>();
 			setIssueId(id);
-			setState(state);
-			setIssueType(issueType);
+			setState(NEW_NAME);
+			setIssueType(issueType.toString());
 			setSummary(summary);
-			setOwner(owner);
-			setConfirmed(confirmed);
-			setResolution(resolution);
+			setOwner("");
+			setConfirmed(false);
+			setResolution("");
 			addNote(note);
-		// if any of the fields cannot be set with given parameters
+		//if any of the fields cannot be set with given parameters
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Issue cannot be created.");
 		}
@@ -132,15 +132,15 @@ public class Issue {
 			throw new IllegalArgumentException("Invalid state.");
 		} else {
 			if(NEW_NAME.equalsIgnoreCase(state)) {
-				this.issueState = NEW_NAME;
+				this.state = new NewState();
 			} else if (CONFIRMED_NAME.equalsIgnoreCase(state)) {
-				this.issueState = CONFIRMED_NAME;
+				this.state = new ConfirmedState();
 			} else if (WORKING_NAME.equalsIgnoreCase(state)) {
-				this.issueState = WORKING_NAME;
+				this.state = new WorkingState();
 			} else if (VERIFYING_NAME.equalsIgnoreCase(state)) {
-				this.issueState = VERIFYING_NAME;
+				this.state = new VerifyingState();
 			} else if (CLOSED_NAME.equalsIgnoreCase(state)) {
-				this.issueState = CLOSED_NAME;
+				this.state = new ClosedState();
 			} else {
 				throw new IllegalArgumentException("Invalid state.");
 			}
@@ -155,7 +155,7 @@ public class Issue {
 	 */
 	private void setIssueType(String type) {
 		// throw if the type is enhancement and the state is confirmed
-		if(I_ENHANCEMENT.equalsIgnoreCase(type) && issueState.equalsIgnoreCase(CONFIRMED_NAME)) {
+		if(I_ENHANCEMENT.equalsIgnoreCase(type) && state.getStateName().equalsIgnoreCase(CONFIRMED_NAME)) {
 			throw new IllegalArgumentException("Invalid type for state.");
 		}
 		// if the string is a bug
@@ -178,7 +178,7 @@ public class Issue {
 	 */
 	private void setSummary(String summary) {
 		// cannot contain a comma
-		if (summary.contains(",")) {
+		if (summary.contains(",") || "".equals(summary) || null == summary) {
 			throw new IllegalArgumentException("Cannot contain comma.");
 		} else {
 			// otherwise set the summary to the parameter
@@ -192,13 +192,13 @@ public class Issue {
 	 */
 	private void setOwner(String owner) {
 		// working or verifying MUST have owner
-		if(issueState.equalsIgnoreCase(WORKING_NAME) || issueState.equalsIgnoreCase(VERIFYING_NAME)) {
+		if(state.getStateName().equalsIgnoreCase(WORKING_NAME) || state.getStateName().equalsIgnoreCase(VERIFYING_NAME)) {
 			if(owner == null || "".equals(owner)) {
 				throw new IllegalArgumentException("Must have an owner for verifying or working.");
 			}
 		}
 		// New and Confirmed must not have an owner
-		else if(issueState.equalsIgnoreCase(NEW_NAME) || issueState.equalsIgnoreCase(CONFIRMED_NAME)) {
+		else if(state.getStateName().equalsIgnoreCase(NEW_NAME) || state.getStateName().equalsIgnoreCase(CONFIRMED_NAME)) {
 			if(owner != null && !("".equals(owner))) {
 				throw new IllegalArgumentException("Must not have an owner if new or confirmed.");
 			} else {
@@ -219,11 +219,11 @@ public class Issue {
 	 */
 	private void setConfirmed(boolean confirmed) {
 		// if the type is enhancement, the state is new, and the confirmed is true, throw IAE
-		if((issueState.equalsIgnoreCase(NEW_NAME) || getIssueType().equalsIgnoreCase(I_ENHANCEMENT)) && confirmed == true) {
+		if((state.getStateName().equalsIgnoreCase(NEW_NAME) || getIssueType().equalsIgnoreCase(I_ENHANCEMENT)) && confirmed == true) {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		} 
 		// if the state is working but not confirmed
-		else if (issueState.equalsIgnoreCase(WORKING_NAME) && !confirmed) {
+		else if (state.getStateName().equalsIgnoreCase(WORKING_NAME) && !confirmed) {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		}
 		else {
@@ -245,14 +245,14 @@ public class Issue {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 		// if resolution is empty while in closed state
-		else if (issueState.equalsIgnoreCase(CLOSED_NAME) && ("".equals(resolution) || null == resolution)) {
+		else if (state.getStateName().equalsIgnoreCase(CLOSED_NAME) && ("".equals(resolution) || null == resolution)) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 		// issues in Verifying state must be fixed
-		else if (issueState.equalsIgnoreCase(VERIFYING_NAME) && !(resolution.equalsIgnoreCase("FIXED"))) {
+		else if (state.getStateName().equalsIgnoreCase(VERIFYING_NAME) && !(resolution.equalsIgnoreCase("FIXED"))) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
-		else if (issueState.equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
+		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
 			return;
 		}
 		// otherwise determine the resolution type
@@ -296,7 +296,7 @@ public class Issue {
 	 * @return state as a String
 	 */
 	public String getStateName() {
-		return issueState; 
+		return state.getStateName(); 
 	}
 	
 	/**
@@ -320,7 +320,7 @@ public class Issue {
 	 */
 	public String getResolution() {
 		// return a string "" if state is new
-		if (issueState.equals(NEW_NAME)) {
+		if (state.getStateName().equals(NEW_NAME)) {
 			return "";
 		} 
 		else {
@@ -379,10 +379,12 @@ public class Issue {
 	 * @throws IllegalArgumentException if the note is null or empty
 	 */
 	private void addNote(String note) {
+
 		// note cannot be null or empty
 		if (note == null || "".equals(note)) {
 			throw new IllegalArgumentException("Note must have script.");
 		} else {
+			// note must have state as such [STATE_NAME] prepended 
 			String noteAppended = "[" + getStateName() + "]";
 			noteAppended += note;
 			notes.add(noteAppended);
@@ -474,7 +476,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public String getStateName() {
-			 return null;
+			 return "New";
 		 }
 		 
 	 }
@@ -508,7 +510,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public String getStateName() {
-			 return null;
+			 return "Working";
 		 }
 		 
 	 }
@@ -539,7 +541,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public String getStateName() {
-			 return null;
+			 return "Confirmed";
 		 }
 		 
 	 }
@@ -570,7 +572,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public String getStateName() {
-			 return null;
+			 return "Verifying";
 		 }
 		 
 	 }
@@ -601,7 +603,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public String getStateName() {
-			 return null;
+			 return "Closed";
 		 }
 		 
 	 }

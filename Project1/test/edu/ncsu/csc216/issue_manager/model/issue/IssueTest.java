@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
+import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
 /**
  * The test file to ensure the proper function of Issue
@@ -135,6 +136,31 @@ class IssueTest {
 	@Test
 	public void testInvalidShortConstructor() {
 		
+		// issue invalid id
+		Exception e1 = assertThrows(IllegalArgumentException.class, 
+				() -> new Issue(0,IssueType.BUG, "buggy stuff happening",
+						"an international spy bugs your apartment!"));
+		assertEquals("Issue cannot be created.", e1.getMessage());
+		
+		// issue invalid type
+		Exception e2 = assertThrows(IllegalArgumentException.class, 
+				() -> new Issue(1,null, "buggy stuff happening",
+						"an international spy bugs your apartment!"));
+		assertEquals("Issue cannot be created.", e2.getMessage());
+		
+		// issue invalid summary
+		Exception e3 = assertThrows(IllegalArgumentException.class, 
+				() -> new Issue(1,IssueType.BUG, "",
+						"an international spy bugs your apartment!"));
+		assertEquals("Issue cannot be created.", e3.getMessage());
+		
+		// issue invalid note
+		Exception e4 = assertThrows(IllegalArgumentException.class, 
+				() -> new Issue(1,IssueType.BUG, "buggy stuff happening",
+						""));
+		assertEquals("Issue cannot be created.", e4.getMessage());
+		
+		
 	}
 	
 	/**
@@ -175,6 +201,10 @@ class IssueTest {
 	 */
 	@Test
 	public void testValidShortConstructor() {
+		
+		// issue valid 
+				Issue issue5 = assertDoesNotThrow(
+						() -> new Issue(1, IssueType.BUG, "bugs or humans", "bugs and humans are the same"));
 		
 		
 	}
