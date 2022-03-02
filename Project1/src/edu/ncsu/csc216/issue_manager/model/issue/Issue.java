@@ -50,6 +50,17 @@ public class Issue {
 	private Resolution resolution;
 	/** The Issue's state **/
 	private IssueState state;
+	/** Represents the new state **/
+	private IssueState newState = new NewState();
+	/** Represents the confirmed state **/
+	private IssueState confirmedState = new ConfirmedState();
+	/** Represents the working state **/
+	private IssueState workingState = new WorkingState();
+	/** Represents the verifying state **/
+	private IssueState verifyingState = new VerifyingState();
+	/** Represents the closed state **/
+	private IssueState closedState = new ClosedState();
+	
 	
 	/**
 	 * The constructor that uses the id, type, summary, and note
@@ -253,7 +264,13 @@ public class Issue {
 		else if (state.getStateName().equalsIgnoreCase(VERIFYING_NAME) && !(resolution.equalsIgnoreCase("FIXED"))) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
-		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
+//		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
+//			return;
+//		} 
+//		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && ("".equals(resolution) || null == resolution)) {
+//			return;
+//		} 
+		else if (resolution == null || "".equals(resolution)) {
 			return;
 		}
 		// otherwise determine the resolution type
@@ -495,7 +512,7 @@ public class Issue {
 				 // if the issue is an enhancement
 				 if(issueType == IssueType.ENHANCEMENT) {
 					 owner = c.getOwnerId();
-					 state = new WorkingState();
+					 state = workingState;
 				 } else {
 					 // throw if trying to assign an owner on a bug from new
 					 throw new UnsupportedOperationException("Invalid information.");
@@ -507,7 +524,7 @@ public class Issue {
 				 // if the issue is a bug
 				 if (issueType == IssueType.BUG) {
 					 setConfirmed(true);
-					 state = new ConfirmedState();
+					 state = confirmedState;
 				 } else {
 					// throw if trying to confirm an enhancement
 					 throw new UnsupportedOperationException("Invalid information.");
@@ -568,14 +585,14 @@ public class Issue {
 			 // if the resolution is fixed
 			 if (c.getResolution() == Resolution.FIXED) {
 				 // set to verifying
-				 state = new VerifyingState();
+				 state = verifyingState;
 			 } 
 			 // if resolution is not fixed
 			 else {
 				 try {
 					 setResolution(c.getResolution().toString());
 					// set to closed
-					 state = new ClosedState();
+					 state = closedState;
 				 }
 				 // might catch exception setting worksforme to an enhancement
 				 catch (Exception e) {
@@ -621,13 +638,13 @@ public class Issue {
 				 // assign to an owner
 				 setOwner(c.getOwnerId());
 				 // update to working state
-				 state = new WorkingState();
+				 state = workingState;
 			 }
 			 else if ((c.getCommand() == CommandValue.RESOLVE) && c.getResolution() == Resolution.WONTFIX) {
 				 // set resolution to wontfix
 				 setResolution(c.getResolution().toString());
 				 // set state to closed
-				 state = new ClosedState();	 
+				 state = closedState;	 
 			 } 
 			 // throwing for any other case
 			 else {
@@ -669,13 +686,13 @@ public class Issue {
 			 // verified
 			 if (c.getCommand() == CommandValue.VERIFY) {
 				 // set to closed
-				 state = new ClosedState();
+				 state = closedState;
 			 }
 			 
 			 // reopened
 			 else if (c.getCommand() == CommandValue.REOPEN) {
 				 // set to working
-				 state = new WorkingState();
+				 state = workingState;
 			 }
 			 // otherwise throw 
 			 else {
@@ -718,18 +735,18 @@ public class Issue {
 			 if (c.getCommand() == CommandValue.REOPEN) {
 				 // if enhancement w/ owner
 				 if((issueType == IssueType.ENHANCEMENT) && !(owner == null || "".equals(owner))){
-					 state = new WorkingState();
+					 state = workingState;
 				 }
 				 // bug, confirmed, w/ owner
 				 else if ((issueType == IssueType.BUG) && isConfirmed() && !(owner == null || "".equals(owner))) {
-					 state = new WorkingState();
+					 state = workingState;
 				 }
 				 // bug, confirmed, no owner
 				 else if ((issueType == IssueType.BUG) && isConfirmed() && (owner == null || "".equals(owner))){
-					 state = new ConfirmedState();
+					 state = confirmedState;
 				 // otherwise reopen as new
 				 } else {
-					 state = new NewState();
+					 state = newState;
 				 }
 			 }
 			 addNote(c.getNote());
