@@ -1,6 +1,10 @@
 package edu.ncsu.csc216.issue_manager.model.manager;
 
+import java.util.ArrayList;
+
 import edu.ncsu.csc216.issue_manager.model.command.Command;
+import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
+import edu.ncsu.csc216.issue_manager.model.io.IssueWriter;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 /**
@@ -13,6 +17,13 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
  */
 public class IssueManager {
 
+	/** The Instance of IssueManager **/
+	private static IssueManager instance;
+	/** The list of issues **/
+	private ArrayList<Issue> issues = new ArrayList<Issue>();
+	/** IssueList **/
+	private IssueList issueList = new IssueList();
+	
 	/**
 	 * The constructor for the IssueManager
 	 */
@@ -25,30 +36,53 @@ public class IssueManager {
 	 * @return the instanceof IssueManager
 	 */
 	public static IssueManager getInstance() {
-		return null;
+		// if the instance has not yet been instantiated
+		if (instance == null) {
+			// instantiate instance
+			instance = new IssueManager();
+		}
+		// return instance
+		return instance;
 	}
 	
 	/**
 	 * Saves the current issues to a file
 	 * @param filename the name of the file to save the issues onto
+	 * @throws IllegalArgumentException if the file cannot be written
 	 */
 	public void saveIssuesToFile(String filename) {
-		
+		// exception may happen when writing a file
+		try {
+			// write issues to file
+			IssueWriter.writeIssuesToFile(filename, issues);
+		}
+		catch (Exception e){
+			throw new IllegalArgumentException("saveIssuesToFIle exception");
+		}
 	}
 	
 	/**
 	 * Loads issues from a specified file
 	 * @param filename the name of the file to load issues from
+	 * @throws IllegalArgumentException if error is caught with the reader
 	 */
 	public void loadIssuesFromFile(String filename) {
-		
+		// exception may happen when processing file
+		try {
+			// populate issueList with the reader
+			issues = IssueReader.readIssuesFromFile(filename);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException("loadIssuesFromFile exception");
+		}
 	}
 	
 	/**
 	 * Updates the global issueList reference to point to a new IssueList object
 	 */
 	public void createNewIssueList() {
-		
+		// set the issueList to empty
+		issues = new ArrayList<Issue>();
 	}
 	
 	/**
@@ -56,7 +90,18 @@ public class IssueManager {
 	 * @return return a 2D Object array containing issues
 	 */
 	public Object[][] getIssueListAsArray(){
-		return null;
+		// create an array of objects storing elements of issues
+		// instantiate array
+		Object[][] issueArray = new Object[issues.size()][4];
+		
+		for(int i = 0; i < issues.size(); i++) {
+			Issue currentIssue = issues.get(i);
+			issueArray[i][0] = currentIssue.getIssueId();
+			issueArray[i][1] = currentIssue.getStateName();
+			issueArray[i][2] = currentIssue.getIssueType();
+			issueArray[i][3] = currentIssue.getSummary();
+		}
+		return issueArray;
 	}
 	
 	/**
@@ -65,7 +110,31 @@ public class IssueManager {
 	 * @return return a 2D Object array containing issues of a certain type
 	 */
 	public Object[][] getIssueListAsArrayByIssueType(String issue){
-		return null;
+		// create a counter 
+		int typeCounter = 0;
+		// find number of issue type
+		for (int i = 0; i < issues.size(); i++) {
+			if (issues.get(i).getIssueType().equalsIgnoreCase(issue)) {
+				typeCounter++;
+			}
+		}
+		// create an array of objects storing elements of issues
+		// instantiate array
+		Object[][] issueArray = new Object[typeCounter][4];
+		
+		// keep track of which entry you should be in
+		int counter = 0;
+		for(int i = 0; i < issues.size(); i++) {
+			Issue currentIssue = issues.get(i);
+			if(currentIssue.getIssueType().equalsIgnoreCase(issue)) {
+				issueArray[counter][0] = currentIssue.getIssueId();
+				issueArray[counter][1] = currentIssue.getStateName();
+				issueArray[counter][2] = currentIssue.getIssueType();
+				issueArray[counter][3] = currentIssue.getSummary();
+				counter++;
+			}
+		}
+		return issueArray;
 	}
 	
 	/**
@@ -74,7 +143,8 @@ public class IssueManager {
 	 * @return the Issue tied to the specified ID
 	 */
 	public Issue getIssueById(int id) {
-		return null;
+		issueList.addIssues(issues);
+		return issueList.getIssueById(id);
 	}
 	
 	/**
@@ -83,7 +153,7 @@ public class IssueManager {
 	 * @param command   the command the user/GUI wants to execute upon the issue
 	 */
 	public void executeCommand(int id, Command command) {
-		
+		getIssueById(id).update(command);
 	}
 	
 	/**
@@ -91,7 +161,7 @@ public class IssueManager {
 	 * @param id the ID attached to the issue the user is seeking to delete
 	 */
 	public void deleteIssueById(int id) {
-		
+		issueList.deleteIssueById(id);
 	}
 	
 	/**
@@ -101,7 +171,7 @@ public class IssueManager {
 	 * @param note     the note tied to the issue as a string
 	 */
 	public void addIssueToList(IssueType issue, String summary, String note) {
-		
+		issueList.addIssue(issue, summary, note);
 	}
  	
 }

@@ -246,26 +246,20 @@ class IssueTest {
 		// verfied as fixed
 		Command command4 = new Command(CommandValue.VERIFY, "alex", Resolution.FIXED, "it be fixed now");
 		
-		try {
-			issue1.update(command1);
-			// make sure state is now confirmed
-			assertTrue(issue1.getStateName().equalsIgnoreCase("confirmed"));
-			issue1.update(command2);
-			// make sure state is now working
-			assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
-			issue1.update(command3);
-			// make sure owner is alex
-			assertTrue(issue1.getOwner().equalsIgnoreCase("alex"));
-			issue1.update(command4);
-			// make sure resolution is fixed
-			assertTrue(issue1.getResolution().equalsIgnoreCase("fixed"));
-			
-		}
-		catch (Exception e) {
-			fail("Should not fail.");
-		}
 		
-		
+		issue1.update(command1);
+		// make sure state is now confirmed
+		assertTrue(issue1.getStateName().equalsIgnoreCase("confirmed"));
+		issue1.update(command2);
+		// make sure state is now working
+		assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
+		issue1.update(command3);
+		// make sure owner is alex
+		assertTrue(issue1.getOwner().equalsIgnoreCase("alex"));
+		issue1.update(command4);
+		// make sure resolution is fixed
+		assertTrue(issue1.getResolution().equalsIgnoreCase("fixed"));
+
 		
 	}
 	
