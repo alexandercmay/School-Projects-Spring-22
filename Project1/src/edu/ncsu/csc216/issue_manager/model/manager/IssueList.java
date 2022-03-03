@@ -37,7 +37,7 @@ public class IssueList {
 		Issue newIssue = new Issue(counter, issue, summary, note);
 		counter++;
 		addIssue(newIssue);
-		 return 0;
+		return newIssue.getIssueId();
 	}
 	
 	/**
@@ -48,7 +48,12 @@ public class IssueList {
 	 */
 	public void addIssues(ArrayList<Issue> issues) {
 		for (int i = 0; i < issues.size(); i++) {
-			issueMasterList.add(issues.get(i));
+			if(i == 0) {
+				issueMasterList.add(issues.get(i));
+			}
+			else {
+			addIssue(issues.get(i));
+			}
 		}
 		// get id of last issue
 		int lastId = issueMasterList.get(issueMasterList.size()-1).getIssueId();
@@ -61,28 +66,24 @@ public class IssueList {
 	 * @param issue the issue object to add to the list
 	 */
 	private void addIssue(Issue issue) {
-		// loop  through entire master list of issues
+		// loop through the master list
 		for(int i = 0; i < issueMasterList.size(); i++) {
-			// i's id 
-			int iId = issueMasterList.get(i).getIssueId();
 			int id = issue.getIssueId();
-			// if current index id is less than the id we keep searching
-			if (iId < id) {
+			int imId = issueMasterList.get(i).getIssueId();
+			
+			if (i == (issueMasterList.size() - 1)) {
+				break;
+			}  
+			else if (imId < id) {
 				continue;
 			} 
-			// don't want duplicates
-			else if (iId == id) {
-				break;
-			}
-			// if the current index id is greater than the id, we've found our spot
-			else if (iId > id) {
-				issueMasterList.add(i, issue);
-			}
-			// issue id must be greater than any found iId
-			else {
+			else if (imId == id) {
+				return;
+			} else if (imId > id) {
 				issueMasterList.add(issue);
 			}
 		}
+		issueMasterList.add(issue);
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package edu.ncsu.csc216.issue_manager.model.io;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,7 +57,7 @@ public class IssueReader {
 			// close the issue separator
 			issueSeparator.close();	
 		} 
-		catch (IllegalArgumentException e) {
+		catch (Exception e) {
 			// if an error is caught, clear the list of issues that were not erroneous
 			issues.clear();
 		}

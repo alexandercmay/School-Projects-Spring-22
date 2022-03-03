@@ -2,6 +2,7 @@ package edu.ncsu.csc216.issue_manager.model.io;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class IssueWriter {
 			fileWriter.close();
 			
 		}
-		catch (Exception e){
+		catch (FileNotFoundException e){
 			
 			throw new IllegalArgumentException("Unable to save file");
 			
