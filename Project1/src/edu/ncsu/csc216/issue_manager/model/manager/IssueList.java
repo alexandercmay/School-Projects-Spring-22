@@ -16,12 +16,14 @@ public class IssueList {
 
 	/** Represents the id of the next issue to be added to the list **/
 	private int counter;
+	/** Represents the list of issues **/
+	private ArrayList<Issue> issueMasterList = new ArrayList<Issue>();
 	
 	/**
 	 * The constructor for a new IssueList. Issue counter is reset to 1 when a new list is created. 
 	 */
 	public IssueList() {
-		
+		counter = 1;
 	}
 	
 	/**
@@ -32,6 +34,9 @@ public class IssueList {
 	 * @return id      returns the id of the issue as an int
 	 */
 	public int addIssue(IssueType issue, String summary, String note) {
+		Issue newIssue = new Issue(counter, issue, summary, note);
+		counter++;
+		addIssue(newIssue);
 		 return 0;
 	}
 	
@@ -42,7 +47,13 @@ public class IssueList {
 	 * @param issues the ArrayList of issues being read in 
 	 */
 	public void addIssues(ArrayList<Issue> issues) {
-		
+		for (int i = 0; i < issues.size(); i++) {
+			issueMasterList.add(issues.get(i));
+		}
+		// get id of last issue
+		int lastId = issueMasterList.get(issueMasterList.size()-1).getIssueId();
+		// set counter to one greater than last id in list
+		counter = lastId + 1;
 	}
 	
 	/**
@@ -50,7 +61,28 @@ public class IssueList {
 	 * @param issue the issue object to add to the list
 	 */
 	private void addIssue(Issue issue) {
-		
+		// loop  through entire master list of issues
+		for(int i = 0; i < issueMasterList.size(); i++) {
+			// i's id 
+			int iId = issueMasterList.get(i).getIssueId();
+			int id = issue.getIssueId();
+			// if current index id is less than the id we keep searching
+			if (iId < id) {
+				continue;
+			} 
+			// don't want duplicates
+			else if (iId == id) {
+				break;
+			}
+			// if the current index id is greater than the id, we've found our spot
+			else if (iId > id) {
+				issueMasterList.add(i, issue);
+			}
+			// issue id must be greater than any found iId
+			else {
+				issueMasterList.add(issue);
+			}
+		}
 	}
 	
 	/**
@@ -58,7 +90,7 @@ public class IssueList {
 	 * @return the Issue ArrayList
 	 */
 	public ArrayList<Issue> getIssues(){
-		return null;
+		return issueMasterList;
 	}
 	
 	/**
@@ -67,7 +99,14 @@ public class IssueList {
 	 * @return issues by their type in an ArrayList
 	 */
 	public ArrayList<Issue> getIssuesByType(String issue){
-		return null;
+		ArrayList<Issue> specIssue = new ArrayList<Issue>();
+		for(int i = 0; i < issueMasterList.size(); i++) {
+			String type = issueMasterList.get(i).getIssueType();
+			if (type.equalsIgnoreCase(issue)) {
+				specIssue.add(issueMasterList.get(i));
+			}
+		}
+		return specIssue;
 	}
 	
 	/**
@@ -76,6 +115,12 @@ public class IssueList {
 	 * @return the Issue associated with the specified ID
 	 */
 	public Issue getIssueById(int id) {
+		
+		for(int i = 0; i < issueMasterList.size(); i++) {
+			if (id == issueMasterList.get(i).getIssueId()) {
+				return issueMasterList.get(i);
+			}
+		}
 		return null;
 	}
 	
@@ -93,6 +138,10 @@ public class IssueList {
 	 * @param id the ID attached to the issue the user is seeking to delete
 	 */
 	public void deleteIssueById(int id) {
-		
+		for(int i = 0; i < issueMasterList.size(); i++) {
+			if (id == issueMasterList.get(i).getIssueId()) {
+				issueMasterList.remove(i);
+			}
+		}
 	}
 }

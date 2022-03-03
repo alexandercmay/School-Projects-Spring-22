@@ -56,7 +56,7 @@ public class IssueReader {
 			// close the issue separator
 			issueSeparator.close();	
 		} 
-		catch (Exception e) {
+		catch (IllegalArgumentException e) {
 			// if an error is caught, clear the list of issues that were not erroneous
 			issues.clear();
 		}
