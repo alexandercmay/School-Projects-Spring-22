@@ -53,13 +53,14 @@ public class IssueReader {
 				// add the created issue to the issues list
 				issues.add(issue);
 			}
-			issueSeparator.close();
-			
+			// close the issue separator
+			issueSeparator.close();	
 		} 
 		catch (Exception e) {
+			// if an error is caught, clear the list of issues that were not erroneous
 			issues.clear();
-			// let the FNFE do the work here
 		}
+		// return the array of issues
 		return issues;
 	}
 	
@@ -67,6 +68,8 @@ public class IssueReader {
 	 * A helper class to process lines and tokens as information specific to Issues
 	 * @param issue the string containing the issue to be parsed
 	 * @return the Issue object once the String has been parsed
+	 * @throws IllegalArgumentException if there are too many tokens in the field line
+	 * @throws IllegalArgumnetException if the issue cannot be created
 	 */
 	private static Issue processIssue(String issue) {
 		// create a scanner for the string
@@ -74,9 +77,11 @@ public class IssueReader {
 		// create an array for notes
 		ArrayList<String> notes = new ArrayList<String>();
 		try {
+			// grab the first line containing the fields
 			String firstLine = issueCreator.nextLine();
-			
+			// create a scanner for the first line
 			Scanner fieldScanner = new Scanner(firstLine);
+			// parse using commas
 			fieldScanner.useDelimiter(",");
 			int id = fieldScanner.nextInt();
 			String state = fieldScanner.next();
@@ -84,28 +89,37 @@ public class IssueReader {
 			String summary = fieldScanner.next();
 			String owner = fieldScanner.next();
 			boolean confirmed = fieldScanner.nextBoolean();
+			// set default resolution to empty since it is the last token
 			String resolution = "";
+			// if there is one more token, it is a resolution besides the empty string
 			if (fieldScanner.hasNext()) {
 				resolution = fieldScanner.next();	
 			}
+			// any more tokens represents an error in the data
 			if (fieldScanner.hasNext()) {
 				fieldScanner.close();
 				throw new IllegalArgumentException("Invalid data.");
 			}
+			// close the field scanner
 			fieldScanner.close();
-			
-			
+			// use the delimiter for getting notes
 			issueCreator.useDelimiter("\r?\n?[-]");
+			// while there are more notes
 			while(issueCreator.hasNext()) {
+				//add note to the notes list
 				notes.add(issueCreator.next());
 			}
+			// create a new issue from the data 
 			Issue issueFromString = new Issue(id, state, type, summary, owner, confirmed, resolution, notes);
+			// close the issueCreator scanner
 			issueCreator.close();
+			// return the issue made from the string
 			return issueFromString;
 			
 		}
+		// catch any errors in processing
 		catch (Exception e) {
-			
+			// invalid data
 			throw new IllegalArgumentException("Invalid data.");
 		}
 		

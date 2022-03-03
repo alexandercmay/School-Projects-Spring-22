@@ -341,6 +341,9 @@ public class Issue {
 		if (state.getStateName().equals(NEW_NAME)) {
 			return "";
 		} 
+		else if (resolution == null) {
+			return "";
+		}
 		else {
 		return resolution.toString();
 		}
@@ -378,8 +381,14 @@ public class Issue {
 		String notesString = "";
 		ArrayList<String> notes = getNotes();
 		for (int i = 0; i < notes.size(); i++) {
+			// if the last note...dont print a new line
+//			if(i == (notes.size() -1)) {
+//				notesString += "-" + notes.get(i);
+//			} 
+//			else {
 			notesString += "-" + notes.get(i) + "\n";
-		}
+			}
+//		}
 		return notesString;
 	}
 	
