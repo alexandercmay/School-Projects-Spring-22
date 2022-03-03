@@ -25,111 +25,67 @@ class IssueListTest {
 	 * Testing the add issues method
 	 */
 	@Test
-	public void testAddIssuesFromList() {
+	public void testAddIssuesFromList() throws FileNotFoundException {
 		
-		try {
-			
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			Issue issue10 = new Issue(10, IssueType.BUG, "summary", "note");
-			issues.add(issue10);
-			IssueList il = new IssueList();
-			il.addIssues(issues);
-			ArrayList<Issue> issList = il.getIssues();
-			assertTrue(issList.get(0).getIssueId() == 1);
-			assertTrue(issList.get(3).getIssueId() == 10);
-			assertTrue(issList.get(4).getIssueId() == 14);
-			
-		
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		Issue issue10 = new Issue(10, IssueType.BUG, "summary", "note");
+		issues.add(issue10);
+		IssueList il = new IssueList();
+		il.addIssues(issues);
+		ArrayList<Issue> issList = il.getIssues();
+		assertTrue(issList.get(0).getIssueId() == 1);
+		assertTrue(issList.get(3).getIssueId() == 10);
+		assertTrue(issList.get(4).getIssueId() == 14);
 	}
 	
 	/**
 	 * Testing the add issue with three parameters
 	 */
 	@Test
-	public void addIssueThreeParameters() {
+	public void addIssueThreeParameters() throws FileNotFoundException {
 		
-		try {
-			
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			IssueList il = new IssueList();
-			il.addIssues(issues);
-			assertTrue(il.addIssue(IssueType.BUG, "bugging", "buggard") == 16);
-			
-			
-		
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		IssueList il = new IssueList();
+		il.addIssues(issues);
+		assertTrue(il.addIssue(IssueType.BUG, "bugging", "buggard") == 16);
 	}
 	
 	/**
 	 * Testing get issues by type
 	 */
 	@Test
-	public void testGettIssueTypes() {
+	public void testGettIssueTypes() throws FileNotFoundException {
 		
-		try {
-			
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			IssueList il = new IssueList();
-			il.addIssues(issues);
-			ArrayList<Issue> bugs = il.getIssuesByType("bug");
-			assertTrue(bugs.size() == 2);
-			
-			
-		
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		IssueList il = new IssueList();
+		il.addIssues(issues);
+		ArrayList<Issue> bugs = il.getIssuesByType("bug");
+		assertTrue(bugs.size() == 2);
 	}
 	
 	/**
 	 * Test get issue by id
 	 */
 	@Test
-	public void testGetIssueById() {
+	public void testGetIssueById() throws FileNotFoundException {
 		
-		try {
-			
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			IssueList il = new IssueList();
-			il.addIssues(issues);
-			assertEquals(il.getIssueById(1), issues.get(0));
-			
-			
-		
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		IssueList il = new IssueList();
+		il.addIssues(issues);
+		assertEquals(il.getIssueById(1), issues.get(0));
 	}
 	
 	/**
 	 * Test delete issue by id
 	 */
 	@Test
-	public void testDeleteIssueById() {
+	public void testDeleteIssueById() throws FileNotFoundException {
 		
-		try {
-			
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			IssueList il = new IssueList();
-			il.addIssues(issues);
-			il.deleteIssueById(1);
-			assertTrue(null == il.getIssueById(1));
-			
-			
-		
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		IssueList il = new IssueList();
+		il.addIssues(issues);
+		il.deleteIssueById(1);
+		assertTrue(null == il.getIssueById(1));
 		
 	}
 	

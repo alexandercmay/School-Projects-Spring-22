@@ -29,13 +29,9 @@ class IssueWriterTest {
 	 * Tests that a file is written correctly
 	 */
 	@Test
-	public void testWrite() {
-		try {
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			IssueWriter.writeIssuesToFile("test-files/testFilename.txt", issues);
-		} catch (IOException e) {
-			fail("Bad writer");
-		}
+	public void testWrite() throws IOException {
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		IssueWriter.writeIssuesToFile("test-files/testFilename.txt", issues);
 		checkFiles("test-files/issue_records1.txt", "testFilename.txt");
 	}
 

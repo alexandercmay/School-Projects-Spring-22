@@ -27,27 +27,18 @@ class IssueReaderTest {
 	 * Tests reading a valid issue file
 	 */
 	@Test
-	public void testReadValidCourseRecords() {
-		try {
-			ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
-			assertEquals(5, issues.size());
-
-		} catch (FileNotFoundException e) {
-			fail("Unexpected error reading " + validTestFile);
-		}
+	public void testReadValidCourseRecords() throws FileNotFoundException {
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		assertEquals(5, issues.size());
 	}
 	
 	/**
 	 * Tests reading an invalid issue file
 	 */
 	@Test
-	public void testReadInvalidCourseRecords() {
+	public void testReadInvalidCourseRecords() throws FileNotFoundException {
 		ArrayList<Issue> issues;
-		try {
-			issues = IssueReader.readIssuesFromFile(invalidTestFile);
-			assertEquals(0, issues.size());
-		} catch (FileNotFoundException e) {
-			fail("Unexpected FileNotFoundException");
-		}
+		issues = IssueReader.readIssuesFromFile(invalidTestFile);
+		assertEquals(0, issues.size());
 	}
 }

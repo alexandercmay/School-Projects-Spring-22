@@ -30,12 +30,14 @@ public class IssueReader {
 	 * @return a non-ordered ArrayList of Issues based on the contents of the file
 	 * @throws FileNotFoundException if the file cannot be found or read
 	 */
-	public static ArrayList<Issue> readIssuesFromFile(String filename) throws FileNotFoundException{
-		// create a new scanner
-		Scanner fileReader = new Scanner(new FileInputStream(filename));
+	public static ArrayList<Issue> readIssuesFromFile(String filename) {
+		
 		// create a new issues array
 		ArrayList<Issue> issues = new ArrayList<Issue>();
 		try {
+			// create a new scanner
+			Scanner fileReader = new Scanner(new FileInputStream(filename));
+			
 			String fileString = "";
 			// while there are lines to process in the file
 			while(fileReader.hasNextLine()) {
