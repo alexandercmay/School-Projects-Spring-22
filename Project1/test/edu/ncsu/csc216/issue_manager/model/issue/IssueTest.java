@@ -175,23 +175,23 @@ class IssueTest {
 		notes.add("note");
 		
 		// issue valid
-		Issue issue1 = assertDoesNotThrow(
+		assertDoesNotThrow(
 				() -> new Issue(3, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes));
 		
 		// issue valid
-		Issue issue2 = assertDoesNotThrow(
+		assertDoesNotThrow(
 				() -> new Issue(1, "NEW", "ENHANCEMENT", "its enchanted yo", "", false, "", notes)); 
 		
 		// issue valid
-		Issue issue3 = assertDoesNotThrow(
+		assertDoesNotThrow(
 				() -> new Issue(80, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes)); 
 		
 		// issue valid
-		Issue issue4 = assertDoesNotThrow(
+		assertDoesNotThrow(
 				() -> new Issue(6, "CLOSED", "ENHANCEMENT", "its enchanted yo", "alex", false, "FIXED", notes));
 		
 		// issue valid 
-		Issue issue5 = assertDoesNotThrow(
+		assertDoesNotThrow(
 				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
 					
 		
@@ -205,19 +205,14 @@ class IssueTest {
 	public void testValidShortConstructor() {
 		
 		// issue valid 
-		Issue issue5 = assertDoesNotThrow(
+		Issue issue = assertDoesNotThrow(
 				() -> new Issue(1, IssueType.BUG, "bugs or humans", "bugs and humans are the same"));
+		assertEquals(issue.getIssueId(), 1);
 		
 		
 	}
 	
-	/**
-	 * Test the addNote method 
-	 */
-	@Test
-	public void testAddNote() {
-		
-	}
+
 
 	/**
 	 * Tests the toString
@@ -234,6 +229,7 @@ class IssueTest {
 	/**
 	 * Tests valid commands for state changes
 	 */
+	@Test
 	public void testValidCommandsNew() {
 		// create a new bug and test possible valid path
 		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");
@@ -266,6 +262,7 @@ class IssueTest {
 	/**
 	 * Tests invalid commands for state changes
 	 */
+	@Test
 	public void testInvalidCommandsNew() {
 		// create a new bug and test possible valid path
 		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");

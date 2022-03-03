@@ -190,7 +190,7 @@ public class Issue {
 	 */
 	private void setSummary(String summary) {
 		// cannot contain a comma
-		if (summary.contains(",") || "".equals(summary) || null == summary) {
+		if (summary.contains(",") || "".equals(summary) /**|| null == summary**/) {
 			throw new IllegalArgumentException("Cannot contain comma.");
 		} else {
 			// otherwise set the summary to the parameter
@@ -231,7 +231,7 @@ public class Issue {
 	 */
 	private void setConfirmed(boolean confirmed) {
 		// if the type is enhancement, the state is new, and the confirmed is true, throw IAE
-		if((state.getStateName().equalsIgnoreCase(NEW_NAME) || getIssueType().equalsIgnoreCase(I_ENHANCEMENT)) && confirmed == true) {
+		if((state.getStateName().equalsIgnoreCase(NEW_NAME) || getIssueType().equalsIgnoreCase(I_ENHANCEMENT)) && confirmed) {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		} 
 		// if the state is working but not confirmed
@@ -649,7 +649,7 @@ public class Issue {
 				 // update to working state
 				 state = workingState;
 			 }
-			 else if ((c.getCommand() == CommandValue.RESOLVE) && c.getResolution() == Resolution.WONTFIX) {
+			 else if (c.getCommand() == CommandValue.RESOLVE && c.getResolution() == Resolution.WONTFIX) {
 				 // set resolution to wontfix
 				 setResolution(c.getResolution().toString());
 				 // set state to closed
@@ -743,15 +743,15 @@ public class Issue {
 			 // reopened
 			 if (c.getCommand() == CommandValue.REOPEN) {
 				 // if enhancement w/ owner
-				 if((issueType == IssueType.ENHANCEMENT) && !(owner == null || "".equals(owner))){
+				 if(issueType == IssueType.ENHANCEMENT && !(owner == null || "".equals(owner))){
 					 state = workingState;
 				 }
 				 // bug, confirmed, w/ owner
-				 else if ((issueType == IssueType.BUG) && isConfirmed() && !(owner == null || "".equals(owner))) {
+				 else if (issueType == IssueType.BUG && isConfirmed() && !(owner == null || "".equals(owner))) {
 					 state = workingState;
 				 }
 				 // bug, confirmed, no owner
-				 else if ((issueType == IssueType.BUG) && isConfirmed() && (owner == null || "".equals(owner))){
+				 else if (issueType == IssueType.BUG && isConfirmed() && (owner == null || "".equals(owner))){
 					 state = confirmedState;
 				 // otherwise reopen as new
 				 } else {

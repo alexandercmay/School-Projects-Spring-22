@@ -33,9 +33,9 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		ArrayList<Issue> issList = il.getIssues();
-		assertTrue(issList.get(0).getIssueId() == 1);
-		assertTrue(issList.get(3).getIssueId() == 10);
-		assertTrue(issList.get(4).getIssueId() == 14);
+		assertSame(issList.get(0).getIssueId(),1);
+		assertSame(issList.get(3).getIssueId(),10);
+		assertSame(issList.get(4).getIssueId(),14);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ class IssueListTest {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		IssueList il = new IssueList();
 		il.addIssues(issues);
-		assertTrue(il.addIssue(IssueType.BUG, "bugging", "buggard") == 16);
+		assertSame(il.addIssue(IssueType.BUG, "bugging", "buggard"), 16);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		ArrayList<Issue> bugs = il.getIssuesByType("bug");
-		assertTrue(bugs.size() == 2);
+		assertSame(bugs.size(), 2);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		il.deleteIssueById(1);
-		assertTrue(null == il.getIssueById(1));
+		assertNull(il.getIssueById(1));
 		
 	}
 	

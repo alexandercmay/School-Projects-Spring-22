@@ -71,7 +71,7 @@ public class IssueList {
 			int id = issue.getIssueId();
 			int imId = issueMasterList.get(i).getIssueId();
 			
-			if (i == (issueMasterList.size() - 1)) {
+			if (i == issueMasterList.size() - 1) {
 				break;
 			}  
 			else if (imId < id) {
@@ -131,7 +131,7 @@ public class IssueList {
 	 * @param command   the command the user wants to execute upon the issue
 	 */
 	public void executeCommand(int id, Command command) {
-		
+		getIssueById(id).update(command);
 	}
 	
 	/**

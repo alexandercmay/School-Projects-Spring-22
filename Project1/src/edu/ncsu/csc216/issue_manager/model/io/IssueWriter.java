@@ -15,12 +15,7 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue;
  */
 public class IssueWriter {
 	
-	/**
-	 * Creates a new IssueWriter
-	 */
-	public IssueWriter() {
-		
-	}
+
 	
 	/**
 	 * Writes issues to a file. Any errors while processing leads to an exception being thrown

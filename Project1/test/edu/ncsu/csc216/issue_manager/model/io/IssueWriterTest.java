@@ -3,10 +3,8 @@ package edu.ncsu.csc216.issue_manager.model.io;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
@@ -22,8 +20,6 @@ class IssueWriterTest {
 
 	/** Valid course records */
 	private final String validTestFile = "test-files/issue_records1.txt";
-	/** Invalid course records */
-	private final String invalidTestFile = "test-files/issue_records_invalid1.txt";
 	
 	/**
 	 * Tests that a file is written correctly
@@ -31,6 +27,7 @@ class IssueWriterTest {
 	@Test
 	public void testWrite() throws IOException {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		assertEquals(issues.size(), 5);
 		IssueWriter.writeIssuesToFile("test-files/testFilename.txt", issues);
 		checkFiles("test-files/issue_records1.txt", "testFilename.txt");
 	}

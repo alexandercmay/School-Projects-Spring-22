@@ -22,8 +22,8 @@ class CommandTest {
 		Command command  = assertDoesNotThrow(
 				() -> new Command(CommandValue.CONFIRM, "alex", Resolution.DUPLICATE, "duplicate bug"),
 				"should not throw exception"); 
-		assertTrue(command.getCommand() == CommandValue.CONFIRM);
-		assertTrue(command.getResolution() == Resolution.DUPLICATE);
+		assertSame(command.getCommand(), CommandValue.CONFIRM);
+		assertSame(command.getResolution(), Resolution.DUPLICATE);
 		assertTrue("alex".equals(command.getOwnerId())); 
 		assertTrue("duplicate bug".equals(command.getNote()));
 	}

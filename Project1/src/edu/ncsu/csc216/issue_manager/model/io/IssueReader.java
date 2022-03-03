@@ -2,7 +2,6 @@ package edu.ncsu.csc216.issue_manager.model.io;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,13 +15,7 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue;
  */
 public class IssueReader {
 	
-	/**
-	 * Creates a new IssueReader
-	 * 
-	 */
-	public IssueReader() {
-		
-	}
+
 	
 	/**
 	 * Reads issues from a file and adds to list as long as there are no errors in processing

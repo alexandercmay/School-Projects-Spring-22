@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
@@ -25,14 +24,7 @@ class IssueManagerTest {
 	/** Valid course records */
 	private final String validTestFile = "test-files/issue_records1.txt";
 	
-//	/**
-//	 * Sets up the IssueManager and clears the data.
-//	 * @throws Exception if error
-//	 */
-//	@BeforeEach
-//	public void setUp() throws Exception {
-//		manager = IssueManager.getInstance();
-//	}
+
 	
 	/**
 	 * Test the getIssueListAsArray
@@ -42,7 +34,7 @@ class IssueManagerTest {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
 		Object[][] testArray = manager.getIssueListAsArray();
-		assertTrue(testArray.length == 5);
+		assertSame(testArray.length, 5);
 		assertTrue(testArray[1][0].equals(3));
 		assertTrue(testArray[2][3].equals("Issue description"));
 	}
@@ -55,7 +47,7 @@ class IssueManagerTest {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
 		Object[][] testArray = manager.getIssueListAsArrayByIssueType("bug");
-		assertTrue(testArray.length == 2);
+		assertSame(testArray.length, 2);
 		assertTrue(testArray[0][0].equals(3));
 		assertTrue(testArray[1][3].equals("Issue description"));
 	}
@@ -80,7 +72,6 @@ class IssueManagerTest {
 		
 		// confirm the bug
 		Command command1 = new Command(CommandValue.RESOLVE, "", Resolution.WONTFIX, "lets get working on this bug");
-		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
 		manager.executeCommand(3, command1);
