@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
+import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
 /**
@@ -18,6 +19,9 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
  *
  */
 class IssueTest {
+	
+	/** Valid course records */
+	private final String validTestFile = "test-files/issue_records1.txt";
 
 	/**
 	 * Test long constructor invalid inputs
@@ -212,8 +216,6 @@ class IssueTest {
 		
 	}
 	
-
-
 	/**
 	 * Tests the toString
 	 */
@@ -227,53 +229,150 @@ class IssueTest {
 	}
 	
 	/**
-	 * Tests valid commands for state changes
+	 * Test the new state
 	 */
 	@Test
-	public void testValidCommandsNew() {
-		// create a new bug and test possible valid path
-		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");
-		// confirm the bug
-		Command command1 = new Command(CommandValue.CONFIRM, "", null, "lets get working on this bug");
-		// assign the bug an owner
-		Command command2 = new Command(CommandValue.ASSIGN, "alex", null, "get to it alex");
-		// owner declares it fixed
-		Command command3 = new Command(CommandValue.RESOLVE, "alex", Resolution.FIXED, "i think it be fixed now");
-		// verfied as fixed
-		Command command4 = new Command(CommandValue.VERIFY, "alex", Resolution.FIXED, "it be fixed now");
+	public void testNewState() {
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
+		// create a bug in the new state
+		Issue issue1 = new Issue (1, "NEW", "BUG", "this is a buglem", "", false, "", notes);
+		// create an enhancement in the  new state
+		Issue issue2 = new Issue (1, "NEW", "ENHANCEMENT", "this is enchanted", "", false, "", notes);
 		
-		
+		// move the issue (bug) to confirmed
+		Command command1 = new Command(CommandValue.CONFIRM, "", null, "yeah its a bug");
 		issue1.update(command1);
-		// make sure state is now confirmed
-		assertTrue(issue1.getStateName().equalsIgnoreCase("confirmed"));
-		issue1.update(command2);
-		// make sure state is now working
-		assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
-		issue1.update(command3);
-		// make sure owner is alex
-		assertTrue(issue1.getOwner().equalsIgnoreCase("alex"));
-		issue1.update(command4);
-		// make sure resolution is fixed
-		assertTrue(issue1.getResolution().equalsIgnoreCase("fixed"));
-
+		// ensure bug's state is now confirmed
+		assertTrue(issue1.getStateName().equalsIgnoreCase("CONFIRMED"));
+		// cant confirm enhancement
+		assertThrows(UnsupportedOperationException.class, () -> issue2.update(command1));
+		
+		// resolve command
+		Command command2 = new Command(CommandValue.RESOLVE, "", Resolution.WONTFIX, " will not fix");
+		// create a bug in the new state
+		Issue issue3 = new Issue (1, "NEW", "BUG", "this is a buglem", "", false, "", notes);
+		// wontfix a new bug
+		issue3.update(command2);
+		assertTrue(issue3.getStateName().equalsIgnoreCase("CLOSED"));
+		// worksforme a new enhancement should fail
+		Command command3 = new Command(CommandValue.RESOLVE, "", Resolution.WORKSFORME, "works for me");
+		assertThrows(UnsupportedOperationException.class, () -> issue2.update(command3));	
 		
 	}
 	
 	/**
-	 * Tests invalid commands for state changes
+	 * Test the working state
 	 */
 	@Test
-	public void testInvalidCommandsNew() {
-		// create a new bug and test possible valid path
-		Issue issue1 = new Issue(1, IssueType.BUG, "bugs and humane", "please fix it brug");
-		// cannot verify a new bug
-		Command command1 = new Command(CommandValue.VERIFY, "", null, "yeah i skipped some steps");
-		assertThrows(UnsupportedOperationException.class, () -> issue1.update(command1));
+	public void testWorkingState() {
+		// create a new note in an array
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
 		
-		// create an enhancement
-		Issue issue2 = new Issue(1, IssueType.ENHANCEMENT, "humane", "please be humane");
-		// cannot confirm an enhancement
-		Command command2 = new Command(CommandValue.CONFIRM, "", null, "yeah i see it");
-		assertThrows(UnsupportedOperationException.class, () -> issue2.update(command2));
+		// new bug in working state
+		Issue issue1 = new Issue (1, "WORKING", "BUG", "this is a buglem", "alex", true, "", notes);
+		// move the issue (bug) to verifying
+		Command command1 = new Command(CommandValue.RESOLVE, "alex", Resolution.FIXED, "yeah its fixed");
+		issue1.update(command1);
+		assertTrue(issue1.getStateName().equalsIgnoreCase("VERIFYING"));
+		
+		// new bug in working state
+		Issue issue2 = new Issue (1, "WORKING", "BUG", "this is a buglem", "alex", true, "", notes);
+		
+		// move the issue (bug) to verifying
+		Command command2 = new Command(CommandValue.RESOLVE, "alex", Resolution.WORKSFORME, "yeah its fixed");
+		issue2.update(command2);
+		assertTrue(issue2.getStateName().equals("closed"));
+		
+		// throw exception when enhancement is worksforme
+		// new bug in working state
+		Issue issue3 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", true, "", notes);
+		
+		// move the issue (enhancement) to verifying
+		Command command3 = new Command(CommandValue.RESOLVE, "alex", Resolution.WORKSFORME, "yeah its fixed");
+		assertThrows(UnsupportedOperationException.class, () -> issue3.update(command3));
+		
+		
 	}
+	
+	/**
+	 * Test the confirmed state
+	 */
+	@Test
+	public void testConfirmedgState() {
+		// create a new note in an array
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
+		
+		// new bug in confirmed state
+		Issue issue1 = new Issue (1, "CONFIRMED", "BUG", "this is a buglem", "", true, "", notes);
+		// command to assign an owner
+		Command command1 = new Command(CommandValue.ASSIGN, "alex", null, "yeah this is an issue");
+		issue1.update(command1);
+		assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
+		
+		// resolve wont fix
+		// new bug in confirmed state
+		Issue issue2 = new Issue (1, "CONFIRMED", "BUG", "this is a buglem", "", true, "", notes);
+		Command command2 = new Command(CommandValue.RESOLVE, "", Resolution.WONTFIX, "wont fix");
+		issue2.update(command2);
+		assertTrue(issue2.getStateName().equalsIgnoreCase("closed"));
+	}
+	
+	/**
+	 * Test verifying state
+	 */
+	@Test
+	public void testVerifyingState() {
+		// create a new note in an array
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
+		
+		// new bug in verifying state
+		Issue issue1 = new Issue (1, "VERIFYING", "BUG", "this is a buglem", "alex", true, "FIXED", notes);
+		// command to verify
+		Command command1 = new Command(CommandValue.VERIFY, "alex", null, "yeah this is fixed");
+		issue1.update(command1);
+		assertTrue(issue1.getStateName().equalsIgnoreCase("CLOSED"));
+		
+		// new bug in verifying state
+		Issue issue2 = new Issue (1, "VERIFYING", "BUG", "this is a buglem", "alex", true, "FIXED", notes);
+		// command to verify
+		Command command2 = new Command(CommandValue.REOPEN, "alex", null, "yeah this isnt fixed");
+		issue2.update(command2);
+		assertTrue(issue2.getStateName().equalsIgnoreCase("working"));	
+		}
+	
+	/**
+	 * Test closed state
+	 */
+	@Test
+	public void testClosedState() {
+		// create a new note in an array
+		ArrayList<String> notes = new ArrayList<String>();
+		notes.add("[New] Note 1");
+		
+		
+		// create enhancement no owner
+		Issue issue1 = new Issue(1, "CLOSED", "ENHANCEMENT", "enchanted", "alex", false, "FIXED", notes);
+		Command command1 = new Command(CommandValue.REOPEN, "alex", null, "reopen it");
+		issue1.update(command1);
+		assertTrue(issue1.getStateName().equalsIgnoreCase("working"));
+		
+		//bug confirmed with owner
+		Issue issue2 = new Issue (1, "CLOSED", "BUG", "this is a buglem", "alex", true, "FIXED", notes);
+		// command to verify
+		Command command2 = new Command(CommandValue.REOPEN, "alex", null, "yeah this isnt fixed");
+		issue2.update(command2);
+		assertTrue(issue2.getStateName().equalsIgnoreCase("working"));
+		
+		// bug confirmed no owner
+		Issue issue3 = new Issue (1, "CLOSED", "BUG", "this is a buglem", "", true, "FIXED", notes);
+		// command to verify
+		Command command3 = new Command(CommandValue.REOPEN, "", null, "yeah this isnt fixed");
+		issue3.update(command3);
+		assertTrue(issue3.getStateName().equalsIgnoreCase("confirmed"));
+	}
+	
 }

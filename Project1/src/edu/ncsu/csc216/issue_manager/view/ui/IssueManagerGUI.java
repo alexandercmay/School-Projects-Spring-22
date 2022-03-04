@@ -201,7 +201,7 @@ public class IssueManagerGUI extends JFrame implements ActionListener {
 				repaint();
 			} catch (IllegalArgumentException exp) {
 				JOptionPane.showMessageDialog(this, exp.getMessage());
-			} catch (IllegalStateException exp) {
+
 				//Don't do anything - user canceled (or error)
 			}
 		} else if (e.getSource() == itemSaveIssueList) {

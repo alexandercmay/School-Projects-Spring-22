@@ -532,8 +532,8 @@ public class Issue {
 				 
 				 // if the issue is a bug
 				 if (issueType == IssueType.BUG) {
-					 setConfirmed(true);
 					 state = confirmedState;
+					 setConfirmed(true);
 				 } else {
 					// throw if trying to confirm an enhancement
 					 throw new UnsupportedOperationException("Invalid information.");
@@ -545,6 +545,7 @@ public class Issue {
 				 try {
 					 // set the resolution to the command's resolution
 					 setResolution(c.getResolution().toString());
+					 state = closedState;
 				 }
 				 // might catch an issue if setting worksforme to enhancement 
 				 catch (Exception e) {
@@ -644,10 +645,11 @@ public class Issue {
 		 public void updateState(Command c) {
 			 // if assign 
 			 if (c.getCommand() == CommandValue.ASSIGN) {
+				// update to working state
+				 state = workingState;
 				 // assign to an owner
 				 setOwner(c.getOwnerId());
-				 // update to working state
-				 state = workingState;
+				 
 			 }
 			 else if (c.getCommand() == CommandValue.RESOLVE && c.getResolution() == Resolution.WONTFIX) {
 				 // set resolution to wontfix
