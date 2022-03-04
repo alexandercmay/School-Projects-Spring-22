@@ -33,9 +33,9 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		ArrayList<Issue> issList = il.getIssues();
-		assertSame(issList.get(0).getIssueId(), 1);
-		assertSame(issList.get(3).getIssueId(), 10);
-		assertSame(issList.get(4).getIssueId(), 14);
+		assertEquals(issList.get(0).getIssueId(), 1);
+		assertEquals(issList.get(3).getIssueId(), 10);
+		assertEquals(issList.get(4).getIssueId(), 14);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ class IssueListTest {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		IssueList il = new IssueList();
 		il.addIssues(issues);
-		assertSame(il.addIssue(IssueType.BUG, "bugging", "buggard"), 16);
+		assertEquals(il.addIssue(IssueType.BUG, "bugging", "buggard"), 16);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		ArrayList<Issue> bugs = il.getIssuesByType("bug");
-		assertSame(bugs.size(), 2);
+		assertEquals(bugs.size(), 2);
 	}
 	
 	/**

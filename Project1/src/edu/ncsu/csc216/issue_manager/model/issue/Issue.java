@@ -98,7 +98,7 @@ public class Issue {
 	 * @param confirmed    true if the Issue is confirmed
 	 * @param resolution   the resolution of the Issue (fixed, duplicate, wontFix, worksForMe)
 	 * @param notes        the notes of the Issue
-	 * @throws IllegalArgumnetException if the inputs are invalid
+	 * @throws IllegalArgumentException if the inputs are invalid
 	 */
 	public Issue(int id, String state, String issueType, String summary,
 			String owner, boolean confirmed, String resolution, ArrayList<String> notes) {

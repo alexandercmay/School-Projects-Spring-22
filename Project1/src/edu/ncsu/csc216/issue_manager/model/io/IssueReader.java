@@ -21,7 +21,6 @@ public class IssueReader {
 	 * Reads issues from a file and adds to list as long as there are no errors in processing
 	 * @param filename the name of the file to read issues from
 	 * @return a non-ordered ArrayList of Issues based on the contents of the file
-	 * @throws FileNotFoundException if the file cannot be found or read
 	 */
 	public static ArrayList<Issue> readIssuesFromFile(String filename) {
 		
