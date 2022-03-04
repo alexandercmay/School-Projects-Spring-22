@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
-import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
 /**
@@ -19,9 +18,7 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
  *
  */
 class IssueTest {
-	
-	/** Valid course records */
-	private final String validTestFile = "test-files/issue_records1.txt";
+
 
 	/**
 	 * Test long constructor invalid inputs
@@ -34,55 +31,55 @@ class IssueTest {
     	// id less than 1
 		Exception e1 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(0, "WORKING", "BUG", "buggy stuff happening",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e1.getMessage());
 		
 		// comma in summary text eg too much info
 		Exception e2 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUG", "buggy stuff happening, yo",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e2.getMessage());
 		
 		// incorrect state name
 		Exception e3 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WONKING", "BUG", "buggy stuff happening",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e3.getMessage());
 		
 		// incorrect type
 		Exception e4 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUGGY", "buggy stuff happening",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e4.getMessage());
 		
 		// working without owner empty
 		Exception e5 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUG", "buggy stuff happening",
-						"", true, "WORKSFORME",notes));
+						"", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e5.getMessage());
 		
 		// working without owner null
 		Exception e6 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUG", "buggy stuff happening",
-						null, true, "WORKSFORME",notes));
+						null, true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e6.getMessage());
 		
 		// verifying without owner empty
 		Exception e7 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "VERIFYING", "BUG", "buggy stuff happening",
-					"", true, "WORKSFORME",notes));
+					"", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e7.getMessage());
 		
 		// verifying without owner null
 		Exception e8 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "VERIFYING", "BUG", "buggy stuff happening",
-						null, true, "WORKSFORME",notes));
+						null, true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e8.getMessage());
 		
 		// verifying no resolution empty 
 		Exception e9 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "VERIFYING", "BUG", "buggy stuff happening",
-						"alex", true, "",notes));
+						"alex", true, "", notes));
 		assertEquals("Issue cannot be created.", e9.getMessage());
 		
 		// verifying no resolution null 
@@ -94,25 +91,25 @@ class IssueTest {
 		// closed no resolution empty 
 		Exception e11 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "CLOSED", "BUG", "buggy stuff happening",
-						"alex", true, "",notes));
+						"alex", true, "", notes));
 		assertEquals("Issue cannot be created.", e11.getMessage());
 		
     	// closed no resolution null 
 		Exception e12 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "CLOSED", "BUG", "buggy stuff happening",
-						"alex", true, null,notes));
+						"alex", true, null, notes));
 		assertEquals("Issue cannot be created.", e12.getMessage());
 		
 		// enhancement in confirmed state
 		Exception e13 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "CONFIRMED", "ENHANCEMENT", "please enchant this enhancement",
-						"alex", false, "WORKSFORME",notes));
+						"alex", false, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e13.getMessage());
 		
 		// bug in working state not confirmed
 		Exception e14 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUG", "buggy stuff happening",
-						"alex", false, "WORKSFORME",notes));
+						"alex", false, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e14.getMessage());
 		
 		// verifying not fixed
@@ -124,14 +121,14 @@ class IssueTest {
 		// enhancement with confirmed boolean
 		Exception e16 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "ENHANCEMENT", "please enchant this enhancement",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e16.getMessage());
 		
 		// no empty notes list
 		notes.clear();
 		Exception e17 = assertThrows(IllegalArgumentException.class, 
 				() -> new Issue(1, "WORKING", "BUG", "buggy stuff happening",
-						"alex", true, "WORKSFORME",notes));
+						"alex", true, "WORKSFORME", notes));
 		assertEquals("Issue cannot be created.", e17.getMessage());
 		
 	}
@@ -144,26 +141,22 @@ class IssueTest {
 		
 		// issue invalid id
 		Exception e1 = assertThrows(IllegalArgumentException.class, 
-				() -> new Issue(0,IssueType.BUG, "buggy stuff happening",
-						"an international spy bugs your apartment!"));
+				() -> new Issue(0, IssueType.BUG, "buggy stuff happening", "an international spy bugs your apartment!"));
 		assertEquals("Issue cannot be created.", e1.getMessage());
 		
 		// issue invalid type
 		Exception e2 = assertThrows(IllegalArgumentException.class, 
-				() -> new Issue(1,null, "buggy stuff happening",
-						"an international spy bugs your apartment!"));
+				() -> new Issue(1, null, "buggy stuff happening", "an international spy bugs your apartment!"));
 		assertEquals("Issue cannot be created.", e2.getMessage());
 		
 		// issue invalid summary
 		Exception e3 = assertThrows(IllegalArgumentException.class, 
-				() -> new Issue(1,IssueType.BUG, "",
-						"an international spy bugs your apartment!"));
+				() -> new Issue(1, IssueType.BUG, "", "an international spy bugs your apartment!"));
 		assertEquals("Issue cannot be created.", e3.getMessage());
 		
 		// issue invalid note
 		Exception e4 = assertThrows(IllegalArgumentException.class, 
-				() -> new Issue(1,IssueType.BUG, "buggy stuff happening",
-						""));
+				() -> new Issue(1, IssueType.BUG, "buggy stuff happening", ""));
 		assertEquals("Issue cannot be created.", e4.getMessage());
 		
 		
@@ -224,7 +217,7 @@ class IssueTest {
 		String exToString = "* 1,New,Enhancement,enhance image!,,false,\n-[New] Note 1\n";
 		ArrayList<String> notes = new ArrayList<String>();
 		notes.add("[New] Note 1");
-		Issue issue = new Issue(1, "NEW", "Enhancement", "enhance image!", "", false,"",notes);
+		Issue issue = new Issue(1, "NEW", "Enhancement", "enhance image!", "", false, "", notes);
 		assertEquals(exToString, issue.toString());
 	}
 	

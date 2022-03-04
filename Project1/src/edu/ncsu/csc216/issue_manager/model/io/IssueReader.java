@@ -35,7 +35,7 @@ public class IssueReader {
 			// while there are lines to process in the file
 			while(fileReader.hasNextLine()) {
 				// tack a new line onto the end of each line
-				fileString += fileReader.nextLine()+  "\n";
+				fileString += fileReader.nextLine() +  "\n";
 			}
 			// done with reading in the file directly
 			fileReader.close();

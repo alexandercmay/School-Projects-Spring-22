@@ -56,7 +56,7 @@ public class IssueList {
 			}
 		}
 		// get id of last issue
-		int lastId = issueMasterList.get(issueMasterList.size()-1).getIssueId();
+		int lastId = issueMasterList.get(issueMasterList.size() - 1).getIssueId();
 		// set counter to one greater than last id in list
 		counter = lastId + 1;
 	}

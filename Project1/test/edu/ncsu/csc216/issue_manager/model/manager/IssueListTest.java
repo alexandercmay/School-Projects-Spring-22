@@ -33,9 +33,9 @@ class IssueListTest {
 		IssueList il = new IssueList();
 		il.addIssues(issues);
 		ArrayList<Issue> issList = il.getIssues();
-		assertSame(issList.get(0).getIssueId(),1);
-		assertSame(issList.get(3).getIssueId(),10);
-		assertSame(issList.get(4).getIssueId(),14);
+		assertSame(issList.get(0).getIssueId(), 1);
+		assertSame(issList.get(3).getIssueId(), 10);
+		assertSame(issList.get(4).getIssueId(), 14);
 	}
 	
 	/**

@@ -190,7 +190,7 @@ public class Issue {
 	 */
 	private void setSummary(String summary) {
 		// cannot contain a comma
-		if (summary.contains(",") || "".equals(summary) /**|| null == summary**/) {
+		if (summary.contains(",") || "".equals(summary)) {
 			throw new IllegalArgumentException("Cannot contain comma.");
 		} else {
 			// otherwise set the summary to the parameter
@@ -261,7 +261,7 @@ public class Issue {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 		// issues in Verifying state must be fixed
-		else if (state.getStateName().equalsIgnoreCase(VERIFYING_NAME) && !(resolution.equalsIgnoreCase("FIXED"))) {
+		else if (state.getStateName().equalsIgnoreCase(VERIFYING_NAME) && !("FIXED".equalsIgnoreCase(resolution))) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 //		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
@@ -275,13 +275,13 @@ public class Issue {
 		}
 		// otherwise determine the resolution type
 		else {
-			if (resolution.equalsIgnoreCase("WORKSFORME")) {
+			if ("WORKSFORME".equalsIgnoreCase(resolution)) {
 				this.resolution = Resolution.WORKSFORME;
-			} else if (resolution.equalsIgnoreCase("WONTFIX")) {
+			} else if ("WONTFIX".equalsIgnoreCase(resolution)) {
 				this.resolution = Resolution.WONTFIX;
-			} else if (resolution.equalsIgnoreCase("DUPLICATE")) {
+			} else if ("DUPLICATE".equalsIgnoreCase(resolution)) {
 				this.resolution = Resolution.DUPLICATE;
-			} else if (resolution.equalsIgnoreCase("FIXED")){
+			} else if ("FIXED".equalsIgnoreCase(resolution)){
 				this.resolution = Resolution.FIXED;
 			} else {
 				throw new IllegalArgumentException("Invalid resolution.");
@@ -379,16 +379,11 @@ public class Issue {
 	 */
 	public String getNotesString() {
 		String notesString = "";
-		ArrayList<String> notes = getNotes();
-		for (int i = 0; i < notes.size(); i++) {
-			// if the last note...dont print a new line
-//			if(i == (notes.size() -1)) {
-//				notesString += "-" + notes.get(i);
-//			} 
-//			else {
-			notesString += "-" + notes.get(i) + "\n";
+		ArrayList<String> pnotes = getNotes();
+		for (int i = 0; i < pnotes.size(); i++) {
+
+			notesString += "-" + pnotes.get(i) + "\n";
 			}
-//		}
 		return notesString;
 	}
 	
