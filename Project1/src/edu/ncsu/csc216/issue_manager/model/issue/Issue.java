@@ -268,6 +268,10 @@ public class Issue {
 		else if (state.getStateName().equalsIgnoreCase(VERIFYING_NAME) && !("FIXED".equalsIgnoreCase(resolution))) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
+		// new state with resolution
+		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && (resolution != null && resolution != "" )){
+			throw new IllegalArgumentException("Invalid resolution for type.");
+		}
 //		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
 //			return;
 //		} 
@@ -734,7 +738,7 @@ public class Issue {
 			 // the resolution as a variable
 			 Resolution res = c.getResolution();
 			 // if fix is correct
-			 if (cmd == CommandValue.VERIFY) {
+			 if (cmd == CommandValue.VERIFY && issueType == IssueType.BUG) {
 				 state = closedState;
 			 }
 			 // if the team thinks it needs to be re-opened
