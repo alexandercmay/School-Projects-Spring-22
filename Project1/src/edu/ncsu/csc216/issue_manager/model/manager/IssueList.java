@@ -98,16 +98,21 @@ public class IssueList {
 	 * Returns an ArrayList of issues of a certain type (eg enhancement, bug)
 	 * @param issue the type of issue you want to filter for
 	 * @return issues by their type in an ArrayList
+	 * @throws IllegalArgumentException if null is passed as the issue type
 	 */
 	public ArrayList<Issue> getIssuesByType(String issue){
-		ArrayList<Issue> specIssue = new ArrayList<Issue>();
-		for(int i = 0; i < issueMasterList.size(); i++) {
-			String type = issueMasterList.get(i).getIssueType();
-			if (type.equalsIgnoreCase(issue)) {
-				specIssue.add(issueMasterList.get(i));
+		if (issue == null){
+			throw new IllegalArgumentException("Cannot be null");
+		} else {
+			ArrayList<Issue> specIssue = new ArrayList<Issue>();
+			for(int i = 0; i < issueMasterList.size(); i++) {
+				String type = issueMasterList.get(i).getIssueType();
+				if (type.equalsIgnoreCase(issue)) {
+					specIssue.add(issueMasterList.get(i));
+				}
 			}
-		}
-		return specIssue;
+			return specIssue;
+			}
 	}
 	
 	/**
