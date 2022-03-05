@@ -171,25 +171,29 @@ class IssueTest {
 		ArrayList<String> notes = new ArrayList<String>();
 		notes.add("note");
 		
-		// issue valid
-		assertDoesNotThrow(
-				() -> new Issue(3, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes));
+//		// issue valid
+//		assertDoesNotThrow(
+//				() -> new Issue(3, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes));
+//		
+//		// issue valid
+//		assertDoesNotThrow(
+//				() -> new Issue(1, "NEW", "ENHANCEMENT", "its enchanted yo", "", false, "", notes)); 
+//		
+//		// issue valid
+//		assertDoesNotThrow(
+//				() -> new Issue(80, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes)); 
+//		
+//		// issue valid
+//		assertDoesNotThrow(
+//				() -> new Issue(6, "CLOSED", "ENHANCEMENT", "its enchanted yo", "alex", false, "FIXED", notes));
+//		
+//		// issue valid 
+//		assertDoesNotThrow(
+//				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
 		
-		// issue valid
-		assertDoesNotThrow(
-				() -> new Issue(1, "NEW", "ENHANCEMENT", "its enchanted yo", "", false, "", notes)); 
-		
-		// issue valid
-		assertDoesNotThrow(
-				() -> new Issue(80, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes)); 
-		
-		// issue valid
-		assertDoesNotThrow(
-				() -> new Issue(6, "CLOSED", "ENHANCEMENT", "its enchanted yo", "alex", false, "FIXED", notes));
-		
-		// issue valid 
-		assertDoesNotThrow(
-				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
+		// TStest
+		Issue issue1 = new Issue(7, "Working", "Enhancement", "summary", "owner", false, "", notes);
+		assertEquals(issue1.getOwner(), "owner");
 					
 		
 	}

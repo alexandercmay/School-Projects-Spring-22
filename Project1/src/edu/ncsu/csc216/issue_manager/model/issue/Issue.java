@@ -207,6 +207,8 @@ public class Issue {
 		if(state.getStateName().equalsIgnoreCase(WORKING_NAME) || state.getStateName().equalsIgnoreCase(VERIFYING_NAME)) {
 			if(owner == null || "".equals(owner)) {
 				throw new IllegalArgumentException("Must have an owner for verifying or working.");
+			} else {
+				this.owner = owner;
 			}
 		}
 		// New and Confirmed must not have an owner
