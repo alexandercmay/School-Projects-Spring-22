@@ -276,11 +276,11 @@ class IssueTest {
 		// move the issue (bug) to verifying
 		Command command2 = new Command(CommandValue.RESOLVE, "alex", Resolution.WORKSFORME, "yeah its fixed");
 		issue2.update(command2);
-		assertTrue(issue2.getStateName().equals("closed"));
+		assertTrue(issue2.getStateName().equalsIgnoreCase("closed"));
 		
 		// throw exception when enhancement is worksforme
-		// new bug in working state
-		Issue issue3 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", true, "", notes);
+		// new enhancement in working state
+		Issue issue3 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", false, "", notes);
 		
 		// move the issue (enhancement) to verifying
 		Command command3 = new Command(CommandValue.RESOLVE, "alex", Resolution.WORKSFORME, "yeah its fixed");

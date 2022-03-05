@@ -49,7 +49,7 @@ public class Issue {
 	/** The resolution of the issue **/
 	private Resolution resolution;
 	/** The Issue's state **/
-	private IssueState state;
+	private IssueState state = null;
 	/** Represents the new state **/
 	private IssueState newState = new NewState();
 	/** Represents the confirmed state **/
@@ -235,7 +235,7 @@ public class Issue {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		} 
 		// if the state is working but not confirmed
-		else if (state.getStateName().equalsIgnoreCase(WORKING_NAME) && !confirmed) {
+		else if (state.getStateName().equalsIgnoreCase(WORKING_NAME) && !confirmed && getIssueType().equalsIgnoreCase(I_BUG)) {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		}
 		else {
@@ -510,48 +510,46 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 // if the command value is assign
-			 if (c.getCommand() == CommandValue.ASSIGN) {
-				 
-				 // if the issue is an enhancement
-				 if(issueType == IssueType.ENHANCEMENT) {
-					 owner = c.getOwnerId();
-					 state = workingState;
-				 } else {
-					 // throw if trying to assign an owner on a bug from new
-					 throw new UnsupportedOperationException("Invalid information.");
-				 }
-			 } 
-			 // if the command is to confirm
-			 else if (c.getCommand() == CommandValue.CONFIRM) {
-				 
-				 // if the issue is a bug
-				 if (issueType == IssueType.BUG) {
-					 state = confirmedState;
-					 setConfirmed(true);
-				 } else {
-					// throw if trying to confirm an enhancement
-					 throw new UnsupportedOperationException("Invalid information.");
-				 }
-			 }
-			 
-			 // if the command is to resolve
-			 else if (c.getCommand() == CommandValue.RESOLVE) {
-				 try {
-					 // set the resolution to the command's resolution
-					 setResolution(c.getResolution().toString());
+			 // the command as a variable 
+			 CommandValue cmd = c.getCommand();
+			 // the resolution as a variable
+			 Resolution res = c.getResolution();
+			 // if dealing with a bug
+			 if (issueType == IssueType.BUG) {
+				 // if resolve is given
+				 if (cmd == CommandValue.RESOLVE && res != Resolution.FIXED) {
+					 resolution = res;
 					 state = closedState;
 				 }
-				 // might catch an issue if setting worksforme to enhancement 
-				 catch (Exception e) {
+				 // if confirming bug
+				 else if (cmd == CommandValue.CONFIRM) {
+					 state = confirmedState;
+					 setConfirmed(true);
+				 }
+				 // otherwise an exception should be thrown
+				 else {
 					 throw new UnsupportedOperationException("Invalid information.");
 				 }
 			 }
-			 // if not a supported command
-			 else {
-				 throw new UnsupportedOperationException("Invalid information.");
-			 }
 			 
+			 // if dealing with an enhancement
+			 else if (issueType == IssueType.ENHANCEMENT) {
+				 // if assign
+				 if (cmd == CommandValue.ASSIGN) {
+					 owner = c.getOwnerId();
+					 state = workingState;
+				 }
+				 // if resolve, not fixing or worksforme
+				 else if (cmd == CommandValue.RESOLVE && res != Resolution.FIXED && res != Resolution.WORKSFORME) {
+					 state = closedState;
+					 resolution = res;
+				 }
+				 // otherwise illegal command
+				 else {
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
+				 
 			 addNote(c.getNote());
 		 }
 		 
@@ -587,24 +585,40 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 // if the resolution is fixed
-			 if (c.getResolution() == Resolution.FIXED) {
-				 // set to verifying
-				 state = verifyingState;
-			 } 
-			 // if resolution is not fixed
-			 else {
-				 try {
-					 setResolution(c.getResolution().toString());
-					// set to closed
-					 state = closedState;
+			 // the command as a variable 
+			 CommandValue cmd = c.getCommand();
+			 // the resolution as a variable
+			 Resolution res = c.getResolution();
+			 
+			 // if dealing with a bug
+			 if(issueType == IssueType.BUG) {
+				 // if resolve fix
+				 if (cmd == CommandValue.RESOLVE && res == Resolution.FIXED) {
+					 state = verifyingState;
+					 resolution = res;
 				 }
-				 // might catch exception setting worksforme to an enhancement
-				 catch (Exception e) {
+				 // if other resolution
+				 else if (cmd == CommandValue.RESOLVE) {
+					 state = closedState;
+					 resolution = res;
+				 }
+				 // otherwise illegal command
+				 else {
 					 throw new UnsupportedOperationException("Invalid information.");
 				 }
 			 }
-			 
+			 // if dealing with enhancement
+			 else if (issueType == IssueType.ENHANCEMENT) {
+				 // if resolve not worksforme
+				 if (cmd == CommandValue.RESOLVE && res != Resolution.WORKSFORME) {
+					 state = closedState;
+					 resolution = res;
+				 }
+				 // otherwise illegal command
+				 else {
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
 			 //add the note
 			 addNote(c.getNote());
 		 }
@@ -638,25 +652,25 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 // if assign 
-			 if (c.getCommand() == CommandValue.ASSIGN) {
-				// update to working state
+
+			 // the command as a variable 
+			 CommandValue cmd = c.getCommand();
+			 // the resolution as a variable
+			 Resolution res = c.getResolution();
+
+			 // if assigning the bug to staff
+			 if(cmd == CommandValue.ASSIGN && c.getOwnerId() != null) {
+				 owner = c.getOwnerId();
 				 state = workingState;
-				 // assign to an owner
-				 setOwner(c.getOwnerId());
-				 
-			 }
-			 else if (c.getCommand() == CommandValue.RESOLVE && c.getResolution() == Resolution.WONTFIX) {
-				 // set resolution to wontfix
-				 setResolution(c.getResolution().toString());
-				 // set state to closed
-				 state = closedState;	 
 			 } 
-			 // throwing for any other case
+			 // if an issue not worth fixing
+			 else if (cmd == CommandValue.RESOLVE && res != Resolution.FIXED) {
+				 state = closedState;
+			 }
+			 // otherwise it is an illegal command
 			 else {
 				 throw new UnsupportedOperationException("Invalid information.");
 			 }
-			 
 			 addNote(c.getNote());
 		 }
 		 
@@ -689,21 +703,25 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 // verified
-			 if (c.getCommand() == CommandValue.VERIFY) {
-				 // set to closed
+
+			 // the command as a variable 
+			 CommandValue cmd = c.getCommand();
+			 // the resolution as a variable
+			 Resolution res = c.getResolution();
+			 // if fix is correct
+			 if (cmd == CommandValue.VERIFY) {
 				 state = closedState;
 			 }
-			 
-			 // reopened
-			 else if (c.getCommand() == CommandValue.REOPEN) {
-				 // set to working
+			 // if the team thinks it needs to be re-opened
+			 else if (cmd == CommandValue.REOPEN) {
+				 resolution = null;
 				 state = workingState;
 			 }
-			 // otherwise throw 
+			 // otherwise it is an illegal command
 			 else {
 				 throw new UnsupportedOperationException("Invalid information.");
 			 }
+			 
 			 // add note
 			 addNote(c.getNote());
 		 }
@@ -737,21 +755,44 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-			 // reopened
-			 if (c.getCommand() == CommandValue.REOPEN) {
-				 // if enhancement w/ owner
-				 if(issueType == IssueType.ENHANCEMENT && !(owner == null || "".equals(owner))){
+
+			 // the command as a variable 
+			 CommandValue cmd = c.getCommand();
+			 // the resolution as a variable
+			 Resolution res = c.getResolution();
+			 
+			 // if working with a bug
+			 if (issueType == IssueType.BUG) {
+				 // if confirmed bug is reopened with owner
+				 if (cmd == CommandValue.REOPEN && isConfirmed() && !(getOwner() == null || "".equals(getOwner()))) {
+					 resolution = null;
 					 state = workingState;
 				 }
-				 // bug, confirmed, w/ owner
-				 else if (issueType == IssueType.BUG && isConfirmed() && !(owner == null || "".equals(owner))) {
-					 state = workingState;
-				 }
-				 // bug, confirmed, no owner
-				 else if (issueType == IssueType.BUG && isConfirmed() && (owner == null || "".equals(owner))){
+				 // if there is no owner but the bug is confirmed
+				 else if (cmd == CommandValue.REOPEN && isConfirmed()) {
+					 resolution = null;
 					 state = confirmedState;
-				 // otherwise reopen as new
-				 } else {
+				 }
+				 // unconfirmed bug no owner
+				 else if (cmd == CommandValue.REOPEN && (getOwner() == null || "".equals(getOwner()))) {
+					 resolution = null;
+					 state = newState;
+				 }
+				 // otherwise it is an illegal command
+				 else {
+					 throw new UnsupportedOperationException("Invalid information.");
+				 }
+			 }
+			 // if working with an enhancement
+			 else if (issueType == IssueType.ENHANCEMENT) {
+				 // owner 
+				 if (cmd == CommandValue.REOPEN && !(getOwner() == null || "".equals(getOwner()))) {
+					 resolution = null;
+					 state = workingState;
+				 }
+				 // no owner
+				 else if  (cmd == CommandValue.REOPEN && (getOwner() == null || "".equals(getOwner()))) {
+					 resolution = null;
 					 state = newState;
 				 }
 			 }
