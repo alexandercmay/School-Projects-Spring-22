@@ -214,7 +214,7 @@ public class Issue {
 			if(owner != null && !("".equals(owner))) {
 				throw new IllegalArgumentException("Must not have an owner if new or confirmed.");
 			} else {
-				this.owner = "";
+				this.owner = null;
 			}
 		}
 		// if ""
