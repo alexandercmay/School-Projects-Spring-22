@@ -217,6 +217,10 @@ public class Issue {
 				this.owner = "";
 			}
 		}
+		// if ""
+		else if (owner == "" || owner == null) {
+			this.owner = null;
+		}
 		
 		else {
 			this.owner = owner;
@@ -526,7 +530,6 @@ public class Issue {
 				 // if confirming bug
 				 else if (cmd == CommandValue.CONFIRM) {
 					 state = confirmedState;
-					 setOwner(null);
 					 setConfirmed(true);
 				 }
 				 // otherwise an exception should be thrown
