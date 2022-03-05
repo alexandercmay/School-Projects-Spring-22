@@ -78,7 +78,7 @@ public class Issue {
 			setState(NEW_NAME);
 			setIssueType(issueType.toString());
 			setSummary(summary);
-			setOwner("");
+			setOwner(null);
 			setConfirmed(false);
 			setResolution("");
 			addNote(note);
@@ -337,6 +337,7 @@ public class Issue {
 	 * @return resolution as a String
 	 */
 	public String getResolution() {
+		String resString = "";
 		// return a string "" if state is new
 		if (state.getStateName().equals(NEW_NAME)) {
 			return "";
@@ -345,7 +346,8 @@ public class Issue {
 			return "";
 		}
 		else {
-		return resolution.toString();
+		 resString = resolution.toString().toLowerCase();
+		 return resString.substring(0,1).toUpperCase() + resString.substring(1);
 		}
 	}
 	
@@ -611,7 +613,7 @@ public class Issue {
 			 else if (issueType == IssueType.ENHANCEMENT) {
 				 // if resolve not worksforme
 				 if (cmd == CommandValue.RESOLVE && res != Resolution.WORKSFORME) {
-					 state = closedState;
+					 state = verifyingState;
 					 resolution = res;
 				 }
 				 // otherwise illegal command
