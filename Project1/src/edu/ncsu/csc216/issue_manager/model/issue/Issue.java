@@ -654,8 +654,14 @@ public class Issue {
 			 }
 			 // if dealing with enhancement
 			 else if (issueType == IssueType.ENHANCEMENT) {
+				 // duplicate enhancement resolve
+				 if (cmd == CommandValue.RESOLVE && (res == Resolution.DUPLICATE || res == Resolution.WONTFIX)) {
+					 resolution = res;
+					 state =  closedState;
+					 
+				 }
 				 // if resolve not worksforme
-				 if (cmd == CommandValue.RESOLVE && res != Resolution.WORKSFORME) {
+				 else if (cmd == CommandValue.RESOLVE && res != Resolution.WORKSFORME) {
 					 state = verifyingState;
 					 resolution = res;
 				 }
@@ -709,7 +715,8 @@ public class Issue {
 				 state = workingState;
 			 } 
 			 // if an issue not worth fixing
-			 else if (cmd == CommandValue.RESOLVE && res != Resolution.FIXED) {
+			 else if (cmd == CommandValue.RESOLVE && res == Resolution.WONTFIX) {
+				 resolution = res;
 				 state = closedState;
 			 }
 			 // otherwise it is an illegal command
@@ -754,7 +761,7 @@ public class Issue {
 			 // the resolution as a variable
 			 Resolution res = c.getResolution();
 			 // if fix is correct
-			 if (cmd == CommandValue.VERIFY && issueType == IssueType.BUG) {
+			 if (cmd == CommandValue.VERIFY) {
 				 state = closedState;
 			 }
 			 // if the team thinks it needs to be re-opened
