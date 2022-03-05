@@ -242,6 +242,10 @@ public class Issue {
 		else if (state.getStateName().equalsIgnoreCase(WORKING_NAME) && !confirmed && getIssueType().equalsIgnoreCase(I_BUG)) {
 			throw new IllegalArgumentException("Cannot be confirmed in current state.");
 		}
+		// if the state is confirmed but not confirmed
+		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && !confirmed && getIssueType().equalsIgnoreCase(I_BUG)) {
+			throw new IllegalArgumentException("Cannot be confirmed in current state.");
+		}
 		else {
 			this.confirmed = confirmed;
 		}
@@ -478,9 +482,21 @@ public class Issue {
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
 		issueString += getSummary() + ",";
-		issueString += getOwner() + ",";
+		
+		if (getOwner() == null) {
+			issueString += ",";
+		}
+		else {issueString += getOwner() + ",";
+		}
 		issueString += isConfirmed() + ",";
-		issueString += getResolution() + "\n"; 
+		
+		if (getResolution() == null) {
+			issueString += ",\n";
+		}
+		else {
+			issueString += getResolution() + "\n"; 
+		}
+
 		issueString += getNotesString();
 		return issueString;
 		
