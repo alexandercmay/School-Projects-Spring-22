@@ -440,7 +440,7 @@ public class Issue {
 			throw new IllegalArgumentException("Note must have script.");
 		} else {
 			// note must have state as such [STATE_NAME] prepended 
-			String noteAppended = "[ " + getStateName() + "] ";
+			String noteAppended = "[" + getStateName() + "] ";
 			noteAppended += note;
 			notes.add(noteAppended);
 		}
@@ -477,7 +477,7 @@ public class Issue {
 	@Override
 	public String toString() {
 		String issueString = "";
-		issueString += "* ";
+		issueString += "*";
 		issueString += getIssueId() + ",";
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
