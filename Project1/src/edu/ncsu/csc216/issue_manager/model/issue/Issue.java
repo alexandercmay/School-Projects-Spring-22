@@ -526,6 +526,7 @@ public class Issue {
 				 // if confirming bug
 				 else if (cmd == CommandValue.CONFIRM) {
 					 state = confirmedState;
+					 setOwner(null);
 					 setConfirmed(true);
 				 }
 				 // otherwise an exception should be thrown
