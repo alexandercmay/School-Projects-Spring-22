@@ -555,6 +555,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
 			 // the resolution as a variable
@@ -596,6 +597,10 @@ public class Issue {
 			 }
 				 
 			 addNote(c.getNote());
+			 }
+			 catch (UnsupportedOperationException e) {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 		 }
 		 
 		 /**
@@ -630,6 +635,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
+			 try { 
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
 			 // the resolution as a variable
@@ -672,6 +678,10 @@ public class Issue {
 			 }
 			 //add the note
 			 addNote(c.getNote());
+			 }
+			 catch (UnsupportedOperationException e) {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 		 }
 		 
 		 /**
@@ -703,7 +713,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-
+			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
 			 // the resolution as a variable
@@ -724,6 +734,10 @@ public class Issue {
 				 throw new UnsupportedOperationException("Invalid information.");
 			 }
 			 addNote(c.getNote());
+			 }
+			 catch (UnsupportedOperationException e) {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 		 }
 		 
 		 /**
@@ -755,7 +769,7 @@ public class Issue {
 		  */
 		 @Override 
 		 public void updateState(Command c) {
-
+			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
 			 // the resolution as a variable
@@ -776,6 +790,10 @@ public class Issue {
 			 
 			 // add note
 			 addNote(c.getNote());
+			 }
+			 catch (UnsupportedOperationException e) {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 		 }
 		 
 		 /**
@@ -808,6 +826,7 @@ public class Issue {
 		 @Override 
 		 public void updateState(Command c) {
 
+			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
 			 // the resolution as a variable
@@ -849,6 +868,10 @@ public class Issue {
 				 }
 			 }
 			 addNote(c.getNote());
+			 }
+			 catch (UnsupportedOperationException e) {
+				 throw new UnsupportedOperationException("Invalid information.");
+			 }
 		 }
 		 
 		 /**
