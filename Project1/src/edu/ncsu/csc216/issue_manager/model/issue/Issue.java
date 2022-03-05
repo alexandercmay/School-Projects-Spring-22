@@ -349,9 +349,9 @@ public class Issue {
 		String resString = "";
 		// return a string "" if state is new
 		if (state.getStateName().equals(NEW_NAME)) {
-			return "";
+			return null;
 		} 
-		else if (resolution == null) {
+		else if (resolution == null)) {
 			return null;
 		}
 		else {
