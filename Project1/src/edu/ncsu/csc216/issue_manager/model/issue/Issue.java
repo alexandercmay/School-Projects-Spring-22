@@ -479,7 +479,7 @@ public class Issue {
 	@Override
 	public String toString() {
 		String issueString = "";
-		issueString += "*";
+		issueString += "* ";
 		issueString += getIssueId() + ",";
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
@@ -576,7 +576,7 @@ public class Issue {
 				 }
 				 // otherwise an exception should be thrown
 				 else {
-					 throw new UnsupportedOperationException("Invalid information.");
+					 throw new UnsupportedOperationException("Invalid transition.");
 				 }
 			 }
 			 
@@ -594,14 +594,14 @@ public class Issue {
 				 }
 				 // otherwise illegal command
 				 else {
-					 throw new UnsupportedOperationException("Invalid information.");
+					 throw new UnsupportedOperationException("Invalid transition.");
 				 }
 			 }
 				 
 			 addNote(c.getNote());
 			 }
 			 catch (UnsupportedOperationException e) {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 		 }
 		 
@@ -657,7 +657,7 @@ public class Issue {
 				 }
 				 // otherwise illegal command
 				 else {
-					 throw new UnsupportedOperationException("Invalid information.");
+					 throw new UnsupportedOperationException("Invalid transition.");
 				 }
 			 }
 			 // if dealing with enhancement
@@ -675,14 +675,14 @@ public class Issue {
 				 }
 				 // otherwise illegal command
 				 else {
-					 throw new UnsupportedOperationException("Invalid information.");
+					 throw new UnsupportedOperationException("Invalid transition.");
 				 }
 			 }
 			 //add the note
 			 addNote(c.getNote());
 			 }
 			 catch (UnsupportedOperationException e) {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 		 }
 		 
@@ -733,12 +733,12 @@ public class Issue {
 			 }
 			 // otherwise it is an illegal command
 			 else {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 			 addNote(c.getNote());
 			 }
 			 catch (UnsupportedOperationException e) {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 		 }
 		 
@@ -787,14 +787,14 @@ public class Issue {
 			 }
 			 // otherwise it is an illegal command
 			 else {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 			 
 			 // add note
 			 addNote(c.getNote());
 			 }
 			 catch (UnsupportedOperationException e) {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 		 }
 		 
@@ -853,7 +853,7 @@ public class Issue {
 				 }
 				 // otherwise it is an illegal command
 				 else {
-					 throw new UnsupportedOperationException("Invalid information.");
+					 throw new UnsupportedOperationException("Invalid transition.");
 				 }
 			 }
 			 // if working with an enhancement
@@ -868,11 +868,15 @@ public class Issue {
 					 resolution = null;
 					 state = newState;
 				 }
+				 // other command 
+				 else {
+					 throw new UnsupportedOperationException("Invalid transition.");
+				 }
 			 }
 			 addNote(c.getNote());
 			 }
 			 catch (UnsupportedOperationException e) {
-				 throw new UnsupportedOperationException("Invalid information.");
+				 throw new UnsupportedOperationException("Invalid transition.");
 			 }
 		 }
 		 

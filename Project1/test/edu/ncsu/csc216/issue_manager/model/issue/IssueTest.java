@@ -171,25 +171,25 @@ class IssueTest {
 		ArrayList<String> notes = new ArrayList<String>();
 		notes.add("note");
 		
-//		// issue valid
-//		assertDoesNotThrow(
-//				() -> new Issue(3, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes));
-//		
-//		// issue valid
-//		assertDoesNotThrow(
-//				() -> new Issue(1, "NEW", "ENHANCEMENT", "its enchanted yo", "", false, "", notes)); 
-//		
-//		// issue valid
-//		assertDoesNotThrow(
-//				() -> new Issue(80, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes)); 
-//		
-//		// issue valid
-//		assertDoesNotThrow(
-//				() -> new Issue(6, "CLOSED", "ENHANCEMENT", "its enchanted yo", "alex", false, "FIXED", notes));
-//		
-//		// issue valid 
-//		assertDoesNotThrow(
-//				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
+		// issue valid
+		assertDoesNotThrow(
+				() -> new Issue(3, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes));
+		
+		// issue valid
+		assertDoesNotThrow(
+				() -> new Issue(1, "NEW", "ENHANCEMENT", "its enchanted yo", "", false, "", notes)); 
+		
+		// issue valid
+		assertDoesNotThrow(
+				() -> new Issue(80, "VERIFYING", "BUG", "its buggin yo", "alex", true, "FIXED", notes)); 
+		
+		// issue valid
+		assertDoesNotThrow(
+				() -> new Issue(6, "CLOSED", "ENHANCEMENT", "its enchanted yo", "alex", false, "FIXED", notes));
+		
+		// issue valid 
+		assertDoesNotThrow(
+				() -> new Issue(7, "CONFIRMED", "BUG", "its buggin yo", "", true, "DUPLICATE", notes));
 		
 		// TStest
 		Issue issue1 = new Issue(7, "Working", "Enhancement", "summary", "owner", false, "", notes);
@@ -339,6 +339,11 @@ class IssueTest {
 		Command command2 = new Command(CommandValue.REOPEN, "alex", null, "yeah this isnt fixed");
 		issue2.update(command2);
 		assertTrue(issue2.getStateName().equalsIgnoreCase("working"));	
+		
+		//TSIssueClosedStateTest.testInvalidTransitionsFromVerifyingAssignEnhancement
+		Issue issue3  = new Issue(1, "VERIFYING", "ENHANCEMENT", "problem to enchant", "alex", false, "FIXED", notes);
+		Command command3 = new Command(CommandValue.ASSIGN, "alex", null, "you cant do that");
+		assertThrows(UnsupportedOperationException.class, () -> issue3.update(command3));
 		}
 	
 	/**
