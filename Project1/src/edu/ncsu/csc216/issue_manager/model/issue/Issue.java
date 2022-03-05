@@ -275,6 +275,7 @@ public class Issue {
 //			return;
 //		} 
 		else if (resolution == null || "".equals(resolution)) {
+			resolution = null;
 			return;
 		}
 		// otherwise determine the resolution type
