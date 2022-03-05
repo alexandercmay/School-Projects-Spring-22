@@ -352,7 +352,7 @@ public class Issue {
 			return "";
 		} 
 		else if (resolution == null) {
-			return "";
+			return null;
 		}
 		else {
 			// if resolution is worksforme 

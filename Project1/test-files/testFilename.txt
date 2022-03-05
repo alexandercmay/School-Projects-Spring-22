@@ -1,7 +1,7 @@
-* 1,New,Enhancement,Issue description,,false,
+* 1,New,Enhancement,Issue description,null,false,
 -[New] Note 1
 
-* 3,Confirmed,Bug,Issue description,,true,
+* 3,Confirmed,Bug,Issue description,null,true,
 -[New] Note 1
 -[Confirmed] Note 2
 that goes on a new line
@@ -11,13 +11,13 @@ that goes on a new line
 -[Confirmed] Note 2
 -[Working] Note 3
 
-* 14,Verifying,Enhancement,Issue description,null,false,FIXED
+* 14,Verifying,Enhancement,Issue description,null,false,Fixed
 -[New] Note 1
 -[Working] Note 2
 that goes on a new line
 -[Verifying] Note 3
 
-* 15,Closed,Enhancement,Issue description,owner,false,WONTFIX
+* 15,Closed,Enhancement,Issue description,owner,false,WontFix
 -[New] Note 1
 that goes on a new line
 -[Working] Note 2
