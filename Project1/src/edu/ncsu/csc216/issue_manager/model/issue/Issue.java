@@ -351,7 +351,7 @@ public class Issue {
 		if (state.getStateName().equals(NEW_NAME)) {
 			return null;
 		} 
-		else if (resolution == null)) {
+		else if (resolution == null) {
 			return null;
 		}
 		else {
