@@ -80,7 +80,7 @@ public class Issue {
 			setSummary(summary);
 			setOwner(null);
 			setConfirmed(false);
-			setResolution("");
+			setResolution(null);
 			addNote(note);
 		//if any of the fields cannot be set with given parameters
 		} catch (Exception e) {
