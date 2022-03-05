@@ -350,8 +350,26 @@ public class Issue {
 			return "";
 		}
 		else {
-		 resString = resolution.toString().toLowerCase();
-		 return resString.substring(0,1).toUpperCase() + resString.substring(1);
+			// if resolution is worksforme 
+			if (resolution == Resolution.WORKSFORME) {
+				return "WorksForMe";
+			}
+			// if resolution is duplicate
+			else if (resolution == Resolution.DUPLICATE) {
+				return "Duplicate";
+			}
+			// if resolution is wontfix
+			else if (resolution == Resolution.WONTFIX) {
+				return "WontFix";
+			}
+			// if resolution is fixed 
+			else if (resolution == Resolution.FIXED) {
+				return "Fixed";
+			}
+			// otherwise throw
+			else {
+				throw new IllegalArgumentException("Invalid resolution");
+			}
 		}
 	}
 	
