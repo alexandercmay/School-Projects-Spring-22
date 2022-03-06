@@ -20,6 +20,7 @@ public class IssueReader {
 	 * Reads issues from a file and adds to list as long as there are no errors in processing
 	 * @param filename the name of the file to read issues from
 	 * @return a non-ordered ArrayList of Issues based on the contents of the file
+	 * @throws IllegalArgumentException if there are any errors reading in a file
 	 */
 	public static ArrayList<Issue> readIssuesFromFile(String filename) {
 		
@@ -30,6 +31,7 @@ public class IssueReader {
 			Scanner fileReader = new Scanner(new FileInputStream(filename));
 			
 			String fileString = "";
+
 			// while there are lines to process in the file
 			while(fileReader.hasNextLine()) {
 				// tack a new line onto the end of each line
@@ -37,6 +39,10 @@ public class IssueReader {
 			}
 			// done with reading in the file directly
 			fileReader.close();
+			// if the first line is not the format *x,x,x...
+			if(fileString.charAt(0) != '*') {
+				throw new IllegalArgumentException("Unable to load file.");
+			}
 			// parse the string using \\r?\\n?[*] 
 			Scanner issueSeparator = new Scanner(fileString);
 			issueSeparator.useDelimiter("\\r?\\n?[*]");
@@ -53,6 +59,7 @@ public class IssueReader {
 		catch (Exception e) {
 			// if an error is caught, clear the list of issues that were not erroneous
 			issues.clear();
+			throw new IllegalArgumentException("Unable to load file.");
 		}
 		// return the array of issues
 		return issues;
@@ -67,12 +74,12 @@ public class IssueReader {
 	 */
 	private static Issue processIssue(String issue) {
 		// create a scanner for the string
-		Scanner issueCreator = new Scanner(issue);
+		Scanner noteScanner = new Scanner(issue);
 		// create an array for notes
 		ArrayList<String> notes = new ArrayList<String>();
 		try {
 			// grab the first line containing the fields
-			String firstLine = issueCreator.nextLine();
+			String firstLine = noteScanner.nextLine();
 			// create a scanner for the first line
 			Scanner fieldScanner = new Scanner(firstLine);
 			// parse using commas
@@ -97,16 +104,17 @@ public class IssueReader {
 			// close the field scanner
 			fieldScanner.close();
 			// use the delimiter for getting notes
-			issueCreator.useDelimiter("\r?\n?[-]");
+			noteScanner.useDelimiter("\r?\n?[-]");
 			// while there are more notes
-			while(issueCreator.hasNext()) {
+			while(noteScanner.hasNext()) {
 				//add note to the notes list
-				notes.add(issueCreator.next());
+				notes.add(noteScanner.next());
 			}
+			
 			// create a new issue from the data 
 			Issue issueFromString = new Issue(id, state, type, summary, owner, confirmed, resolution, notes);
 			// close the issueCreator scanner
-			issueCreator.close();
+			noteScanner.close();
 			// return the issue made from the string
 			return issueFromString;
 			
