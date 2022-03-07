@@ -105,7 +105,7 @@ public class IssueReader {
 			fieldScanner.close();
 			// use the delimiter for getting notes
 //			noteScanner.useDelimiter("\r?\n?[-]");
-			noteScanner.useDelimiter("\n-");
+			noteScanner.useDelimiter("\n[-]");
 
 			// while there are more notes
 			while(noteScanner.hasNext()) {
