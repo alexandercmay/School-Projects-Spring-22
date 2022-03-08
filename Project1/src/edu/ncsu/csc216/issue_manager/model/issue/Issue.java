@@ -501,7 +501,8 @@ public class Issue {
 		}
 
 		issueString += getNotesString();
-		return issueString;
+		
+		return issueString.substring(0, issueString.length() -1);
 		
 	}
 
