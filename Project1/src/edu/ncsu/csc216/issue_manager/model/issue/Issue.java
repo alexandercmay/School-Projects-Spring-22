@@ -316,7 +316,7 @@ public class Issue {
 		int size = notes.size();
 		String last = notes.get(size-1);
 		notes.remove(size-1);
-		String newLast = last.replace("\n","");
+		String newLast = last.substring(0,last.length()-1);
 		notes.add(newLast);
 		this.notes = notes;
 	}
