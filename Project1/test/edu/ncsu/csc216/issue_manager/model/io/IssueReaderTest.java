@@ -30,6 +30,7 @@ class IssueReaderTest {
 	public void testReadValidCourseRecords() throws FileNotFoundException {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		assertEquals(5, issues.size());
+
 	}
 	
 	/**
