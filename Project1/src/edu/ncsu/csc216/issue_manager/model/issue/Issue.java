@@ -445,7 +445,7 @@ public class Issue {
 			// note must have state as such [STATE_NAME] prepended 
 			String noteAppended = "[" + getStateName() + "] ";
 			noteAppended += note;
-			notes.add(noteAppended);
+			notes.add(noteAppended.substring(0,noteAppended.length()-1));
 		}
 	}
 	
