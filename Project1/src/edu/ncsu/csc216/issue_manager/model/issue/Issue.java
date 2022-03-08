@@ -416,11 +416,9 @@ public class Issue {
 		String notesString = "";
 		ArrayList<String> pnotes = getNotes();
 		for (int i = 0; i < pnotes.size(); i++) {
-			if(i == pnotes.size() -1) {
-				notesString += "-" + pnotes.get(i);
-			} else {
+
 			notesString += "-" + pnotes.get(i) + "\n";
-			}
+			
 			}
 		return notesString;
 	}
