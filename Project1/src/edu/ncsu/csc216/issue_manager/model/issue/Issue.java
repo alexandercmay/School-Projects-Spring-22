@@ -419,10 +419,7 @@ public class Issue {
 		ArrayList<String> pnotes = getNotes();
 		for (int i = 0; i < pnotes.size(); i++) {
 
-			notesString += "-" + pnotes.get(i);
-			if(i != pnotes.size()-1) {
-				notesString += "\n";
-			}
+			notesString += "-" + pnotes.get(i) + "\n";
 			
 			}
 

@@ -3,7 +3,7 @@
 *3,Confirmed,Bug,Issue description,,true,
 -[New] Note 1
 -[Confirmed] Note 2
-that goes on a new line[]
+that goes on a new line
 *7,Working,Bug,Issue description,owner,true,
 -[New] Note 1
 -[Confirmed] Note 2
