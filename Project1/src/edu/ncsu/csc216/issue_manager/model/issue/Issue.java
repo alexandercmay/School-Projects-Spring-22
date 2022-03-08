@@ -1,6 +1,7 @@
 package edu.ncsu.csc216.issue_manager.model.issue;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
@@ -313,11 +314,7 @@ public class Issue {
 		if (notes.isEmpty()) {
 			throw new IllegalArgumentException("Notes cannot be empty");
 		}
-		int size = notes.size();
-		String last = notes.get(size-1);
-		notes.remove(size-1);
-		String newLast = last.substring(0,last.length()-1);
-		notes.add(newLast);
+
 		this.notes = notes;
 	}
 	
