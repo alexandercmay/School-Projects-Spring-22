@@ -30,6 +30,9 @@ class IssueReaderTest {
 	public void testReadValidCourseRecords() throws FileNotFoundException {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		assertEquals(5, issues.size());
+		assertEquals("-[New] Note 1\n"
+				+ "-[Confirmed] Note 2\n"
+				+ "that goes on a new line", issues.get(1).getNotesString());
 
 	}
 	
