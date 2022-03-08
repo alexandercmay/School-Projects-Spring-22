@@ -424,7 +424,7 @@ public class Issue {
 			
 			}
 
-		return notesString.trim();
+		return notesString;
 	}
 	
 	/**

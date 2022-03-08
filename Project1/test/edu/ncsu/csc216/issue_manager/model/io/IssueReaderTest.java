@@ -32,7 +32,7 @@ class IssueReaderTest {
 		assertEquals(5, issues.size());
 		assertEquals("-[New] Note 1\n"
 				+ "-[Confirmed] Note 2\n"
-				+ "that goes on a new line", issues.get(1).getNotesString());
+				+ "that goes on a new line\n", issues.get(1).getNotesString());
 
 	}
 	
