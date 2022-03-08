@@ -77,6 +77,7 @@ public class IssueReader {
 		Scanner noteScanner = new Scanner(issue);
 		// create an array for notes
 		ArrayList<String> notes = new ArrayList<String>();
+		int id = 0;
 		try {
 			// grab the first line containing the fields
 			String firstLine = noteScanner.nextLine();
@@ -84,7 +85,13 @@ public class IssueReader {
 			Scanner fieldScanner = new Scanner(firstLine);
 			// parse using commas
 			fieldScanner.useDelimiter(",");
-			int id = fieldScanner.nextInt();
+			if (fieldScanner.hasNextInt()) {
+				id = fieldScanner.nextInt();
+			} else {
+				fieldScanner.close();
+				throw new IllegalArgumentException("Invalid data");
+			}
+			
 			String state = fieldScanner.next();
 			String type = fieldScanner.next();
 			String summary = fieldScanner.next();
@@ -99,7 +106,7 @@ public class IssueReader {
 			// any more tokens represents an error in the data
 			if (fieldScanner.hasNext()) {
 				fieldScanner.close();
-				throw new IllegalArgumentException("Invalid data.");
+				throw new IllegalArgumentException("Invalid data");
 			}
 			// close the field scanner
 			fieldScanner.close();
