@@ -422,7 +422,8 @@ public class Issue {
 			notesString += "-" + pnotes.get(i) + "\n";
 			
 			}
-		return notesString;
+		String trimmedNotesString = notesString.trim();
+		return trimmedNotesString;
 	}
 	
 	/**
