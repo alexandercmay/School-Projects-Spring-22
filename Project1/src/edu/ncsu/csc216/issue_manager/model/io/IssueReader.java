@@ -112,7 +112,8 @@ public class IssueReader {
 			// while there are more notes
 			while(noteScanner.hasNext()) {
 				//add note to the notes list
-				notes.add(noteScanner.next());
+				String nextNote = noteScanner.next();
+				notes.add(nextNote.substring(0, nextNote.length()-1));
 			}
 			
 			// create a new issue from the data 

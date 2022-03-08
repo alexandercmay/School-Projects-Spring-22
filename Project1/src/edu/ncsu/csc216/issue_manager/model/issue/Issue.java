@@ -502,7 +502,7 @@ public class Issue {
 
 		issueString += getNotesString();
 		
-		return issueString.substring(0, issueString.length() -1);
+		return issueString;
 		
 	}
 
