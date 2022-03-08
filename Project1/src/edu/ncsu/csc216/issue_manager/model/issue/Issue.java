@@ -313,6 +313,11 @@ public class Issue {
 		if (notes.isEmpty()) {
 			throw new IllegalArgumentException("Notes cannot be empty");
 		}
+		int size = notes.size();
+		String last = notes.get(size-1);
+		notes.remove(size-1);
+		String newLast = last.replace("\n","");
+		notes.add(newLast);
 		this.notes = notes;
 	}
 	
@@ -445,7 +450,7 @@ public class Issue {
 			// note must have state as such [STATE_NAME] prepended 
 			String noteAppended = "[" + getStateName() + "] ";
 			noteAppended += note;
-			notes.add(noteAppended.substring(0,noteAppended.length()-1));
+			notes.add(noteAppended);
 		}
 	}
 	
