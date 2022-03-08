@@ -111,7 +111,7 @@ public class IssueReader {
 			// while there are more notes
 			while(noteScanner.hasNext()) {
 				//add note to the notes list
-				String nextNote = noteScanner.next();
+				String nextNote = noteScanner.nextLine();
 				notes.add(nextNote);
 			}
 			
