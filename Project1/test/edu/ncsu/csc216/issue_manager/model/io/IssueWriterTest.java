@@ -26,9 +26,13 @@ class IssueWriterTest {
 	 */
 	@Test
 	public void testWrite() throws IOException {
+		// create an array list of issues using IssueReader
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// ensure the correct size
 		assertEquals(issues.size(), 5);
+		// Write the array list of issues to a file
 		IssueWriter.writeIssuesToFile("test-files/testFilename.txt", issues);
+		// compare the written file to the expected file
 		checkFiles("test-files/expected_issue_records1.txt", "test-files/testFilename.txt");
 	}
 
@@ -38,6 +42,7 @@ class IssueWriterTest {
 	 * @param actFile actual output
 	 */
 	private void checkFiles(String expFile, String actFile) {
+		// try to compare the two files line by line
 		try (Scanner expScanner = new Scanner(new File(expFile));
 			 Scanner actScanner = new Scanner(new File(actFile));) {
 			

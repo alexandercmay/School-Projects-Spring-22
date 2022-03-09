@@ -14,6 +14,7 @@ import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;
+import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
 
 /**
  * The test file to ensure the proper function of IssueManager
@@ -99,6 +100,31 @@ class IssueManagerTest {
 		
 	}
 	
+	/**
+	 * Test createNewIssueList
+	 */
+	@Test
+	public void testCreateNewIssueList() {
+		manager = IssueManager.getInstance();
+		manager.loadIssuesFromFile(validTestFile);
+		assertTrue(manager.getIssueListAsArray().length == 5);
+		manager.createNewIssueList();
+		assertTrue(manager.getIssueListAsArray().length == 0);
+	}
+	
+	/**
+	 * Tests addIssueToList 
+	 */
+	@Test
+	public void testAddIssueToList() {
+		manager = IssueManager.getInstance();
+		manager.loadIssuesFromFile(validTestFile);
+		assertTrue(manager.getIssueListAsArray().length == 5);
+		manager.addIssueToList(IssueType.BUG, "a bug to be sure", "a note to be not empty");
+		assertTrue(manager.getIssueListAsArray().length == 6);
+	}
+	
+
 	/**
 	 * Helper method to compare two files for the same contents
 	 * @param expFile expected output

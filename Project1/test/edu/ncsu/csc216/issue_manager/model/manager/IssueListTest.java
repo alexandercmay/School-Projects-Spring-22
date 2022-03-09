@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import edu.ncsu.csc216.issue_manager.model.command.Command;
+import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
+import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;
 import edu.ncsu.csc216.issue_manager.model.issue.Issue.IssueType;
@@ -50,10 +53,13 @@ class IssueListTest {
 	 */
 	@Test
 	public void addIssueThreeParameters() throws FileNotFoundException {
-		
+		// create a new array list of issues using IssueReader
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new IssueList
 		IssueList il = new IssueList();
+		// Add the issue array to the list
 		il.addIssues(issues);
+		// add a new issue and confirm that its id is one higher than the previous high (15)
 		assertEquals(il.addIssue(IssueType.BUG, "bugging", "buggard"), 16);
 	}
 	
@@ -62,11 +68,15 @@ class IssueListTest {
 	 */
 	@Test
 	public void testGettIssueTypes() throws FileNotFoundException {
-		
+		// create a new array list of issues using IssueReader
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new IssueList
 		IssueList il = new IssueList();
+		// add the array to the list
 		il.addIssues(issues);
+		// filter by type bug and create an array to store bugs
 		ArrayList<Issue> bugs = il.getIssuesByType("bug");
+		// ensure that only two bugs exist in returned array
 		assertEquals(bugs.size(), 2);
 	}
 	
@@ -75,10 +85,13 @@ class IssueListTest {
 	 */
 	@Test
 	public void testGetIssueById() throws FileNotFoundException {
-		
+		// create a new array list of issues using IssueReader
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new IssueList
 		IssueList il = new IssueList();
+		// add the array to the list
 		il.addIssues(issues);
+		// ensure that the IssueList's returned Issue is the same as the first issue in the array 
 		assertEquals(il.getIssueById(1), issues.get(0));
 	}
 	
@@ -87,13 +100,40 @@ class IssueListTest {
 	 */
 	@Test
 	public void testDeleteIssueById() throws FileNotFoundException {
-		
+		// create a new array list of issues using IssueReader
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new IssueList
 		IssueList il = new IssueList();
+		// add the array to the list
 		il.addIssues(issues);
+		// delete the issue with an id of 1
 		il.deleteIssueById(1);
+		// null should be returned as the id no longer exists 
 		assertNull(il.getIssueById(1));
 		
 	}
+	
+	/**
+	 * Test the execute command
+	 */
+	@Test
+	public void testExecute() {
+		// create a new array list of issues using IssueReader
+		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new IssueList
+		IssueList il = new IssueList();
+		// add the array to the list
+		il.addIssues(issues);
+		// create a command
+		Command command1 = new Command(CommandValue.RESOLVE, "alex", Resolution.WONTFIX, "duplicate bug");
+		// execute command on issue with id 1
+		il.executeCommand(1, command1);
+		// get the updated issue
+		Issue updatedIssue = il.getIssueById(1);
+		// confirm the resolution is now wontfix
+		assertTrue("WONTFIX".equalsIgnoreCase(updatedIssue.getResolution()));
+	}
+	
+	
 	
 }
