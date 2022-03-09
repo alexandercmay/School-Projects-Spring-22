@@ -19,10 +19,12 @@ public class IssueManager {
 
 	/** The Instance of IssueManager **/
 	private static IssueManager instance;
-	/** The list of issues **/
-	private ArrayList<Issue> issues = new ArrayList<Issue>();
+
 	/** IssueList **/
 	private IssueList issueList = new IssueList();
+	
+	/** The list of issues **/
+	private ArrayList<Issue> issues = issueList.getIssues();
 	
 	/**
 	 * The constructor for the IssueManager
