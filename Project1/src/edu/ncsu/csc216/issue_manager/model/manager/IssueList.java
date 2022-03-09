@@ -47,22 +47,22 @@ public class IssueList {
 	 * @param issues the ArrayList of issues being read in 
 	 */
 	public void addIssues(ArrayList<Issue> issues) {
+		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (int i = 0; i < issues.size(); i++) {
-			int id = issues.get(i).getIssueId();
+			// break if id is present 
+			if (ids.contains(issues.get(i).getIssueId())) {
+				continue;
+			}
 			if(i == 0) {
 				issueMasterList.add(issues.get(i));
+				ids.add(issues.get(i).getIssueId());
 			}
 			else {
-			for(int j = 0; j < issues.size(); j++) {
-				int currentId = issues.get(j).getIssueId();
-				if (id == currentId) {
-					return;
-				} else {
-					addIssue(issues.get(i));
-				}
-			}
+			addIssue(issues.get(i));
+			ids.add(issues.get(i).getIssueId());
 			}
 		}
+		
 		// get id of last issue
 		int lastId = issueMasterList.get(issueMasterList.size() - 1).getIssueId();
 		// set counter to one greater than last id in list
