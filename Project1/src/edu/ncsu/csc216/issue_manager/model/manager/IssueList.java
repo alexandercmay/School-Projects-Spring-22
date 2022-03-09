@@ -47,6 +47,7 @@ public class IssueList {
 	 * @param issues the ArrayList of issues being read in 
 	 */
 	public void addIssues(ArrayList<Issue> issues) {
+		issueMasterList.clear();
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (int i = 0; i < issues.size(); i++) {
 			// break if id is present 
