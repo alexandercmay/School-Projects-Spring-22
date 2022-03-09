@@ -93,7 +93,9 @@ class IssueManagerTest {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
 		manager.saveIssuesToFile("actFile");
-		checkFiles(expFile, "actFile");
+		Object[][] actual = manager.getIssueListAsArray();
+		assertEquals(actual.length, 5);
+ 		checkFiles(expFile, "actFile");
 		
 	}
 	
