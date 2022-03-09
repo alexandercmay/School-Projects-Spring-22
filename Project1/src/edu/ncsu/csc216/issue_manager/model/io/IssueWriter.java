@@ -51,7 +51,7 @@ public class IssueWriter {
 				}
 
 				issueString += current.getNotesString();
-				fileWriter.println(issueString);
+				fileWriter.println(issueString.trim());
 			}
 			fileWriter.close();
 			
