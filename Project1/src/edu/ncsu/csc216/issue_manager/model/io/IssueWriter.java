@@ -4,6 +4,7 @@ package edu.ncsu.csc216.issue_manager.model.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;
@@ -23,7 +24,7 @@ public class IssueWriter {
 	 * @param issue     the ArrayList of Issues to save to the file
 	 * @throws IllegalArgumentException if the file cannot be saved
 	 */
-	public static void writeIssuesToFile(String filename, List<Issue> issue) {
+	public static void writeIssuesToFile(String filename, ArrayList<Issue> issue) {
 		try {
 			PrintStream fileWriter = new PrintStream(new File(filename));
 			for (int i = 0; i < issue.size(); i++) {

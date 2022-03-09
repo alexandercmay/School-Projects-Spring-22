@@ -2,7 +2,10 @@ package edu.ncsu.csc216.issue_manager.model.manager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +26,8 @@ class IssueManagerTest {
 	private IssueManager manager;
 	/** Valid course records */
 	private final String validTestFile = "test-files/issue_records1.txt";
+	/** Expected course records after saving to file **/
+	private final String expFile = "test-files/expected_issue_records1.txt";
 	
 
 	
@@ -80,5 +85,36 @@ class IssueManagerTest {
 		
 	}
 	
+	/**
+	 * Test save issue to file
+	 */
+	@Test
+	public void testSaveIssueToFile() {
+		manager = IssueManager.getInstance();
+		manager.loadIssuesFromFile(validTestFile);
+		manager.saveIssuesToFile("actFile");
+		checkFiles(expFile, "actFile");
+		
+	}
+	
+	/**
+	 * Helper method to compare two files for the same contents
+	 * @param expFile expected output
+	 * @param actFile actual output
+	 */
+	private void checkFiles(String expFile, String actFile) {
+		try (Scanner expScanner = new Scanner(new File(expFile));
+			 Scanner actScanner = new Scanner(new File(actFile));) {
+			
+			while (expScanner.hasNextLine()) {
+				assertEquals(expScanner.nextLine(), actScanner.nextLine());
+			}
+			
+			expScanner.close();
+			actScanner.close();
+		} catch (IOException e) {
+			fail("Error reading files.");
+		}
+	}
 	
 }
