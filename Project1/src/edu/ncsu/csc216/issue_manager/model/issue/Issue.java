@@ -214,14 +214,14 @@ public class Issue {
 		}
 		// New and Confirmed must not have an owner
 		else if(state.getStateName().equalsIgnoreCase(NEW_NAME) || state.getStateName().equalsIgnoreCase(CONFIRMED_NAME)) {
-			if(owner != null && !("".equals(owner))) {
+			if(owner != null && !("".equals(owner)) && !("null".equals(owner))) {
 				throw new IllegalArgumentException("Must not have an owner if new or confirmed.");
 			} else {
 				this.owner = null;
 			}
 		}
 		// if ""
-		else if (owner == "" || owner == null) {
+		else if (owner == "" || owner == null || "null".equals(owner)) {
 			this.owner = null;
 		}
 		
@@ -459,23 +459,6 @@ public class Issue {
 	 */
 	public void update(Command c) {
 		state.updateState(c);
-		// get state as string
-//		String state = getStateName();
-//		if (state.equalsIgnoreCase(NEW_NAME)) {
-//			
-//		} 
-//		else if (state.equalsIgnoreCase(CONFIRMED_NAME)) {
-//			
-//		}
-//		else if (state.equalsIgnoreCase(WORKING_NAME)) {
-//			
-//		}
-//		else if (state.equalsIgnoreCase(CONFIRMED_NAME)) {
-//			
-//		}
-//		else if (state.equalsIgnoreCase(CLOSED_NAME)) {
-//			
-//		}
 	}
 	
 	/**

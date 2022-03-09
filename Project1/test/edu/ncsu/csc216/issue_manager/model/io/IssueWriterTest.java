@@ -20,7 +20,7 @@ class IssueWriterTest {
 
 	/** Valid course records */
 	private final String validTestFile = "test-files/issue_records1.txt";
-	
+
 	/**
 	 * Tests that a file is written correctly
 	 */
@@ -29,7 +29,7 @@ class IssueWriterTest {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
 		assertEquals(issues.size(), 5);
 		IssueWriter.writeIssuesToFile("test-files/testFilename.txt", issues);
-		checkFiles("test-files/issue_records1.txt", "testFilename.txt");
+		checkFiles("test-files/expected_issue_records1.txt", "test-files/testFilename.txt");
 	}
 
 	/**
