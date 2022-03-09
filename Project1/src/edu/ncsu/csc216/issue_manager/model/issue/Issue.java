@@ -487,7 +487,7 @@ public class Issue {
 	@Override
 	public String toString() {
 		String issueString = "";
-		issueString += "*";
+		issueString += "* ";
 		issueString += getIssueId() + ",";
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
