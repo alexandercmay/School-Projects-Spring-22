@@ -27,7 +27,31 @@ public class IssueWriter {
 		try {
 			PrintStream fileWriter = new PrintStream(new File(filename));
 			for (int i = 0; i < issue.size(); i++) {
-			    fileWriter.println(issue.get(i).toString().trim());
+				Issue current = issue.get(i);
+			   // fileWriter.println(issue.get(i).toString().trim());
+				String issueString = "";
+				issueString += "*";
+				issueString += current.getIssueId() + ",";
+				issueString += current.getStateName() + ","; 
+				issueString += current.getIssueType() + ",";
+				issueString += current.getSummary() + ",";
+				
+				if (current.getOwner() == null) {
+					issueString += "null,";
+				}
+				else {issueString += current.getOwner() + ",";
+				}
+				issueString += current.isConfirmed() + ",";
+				
+				if (current.getResolution() == null) {
+					issueString += "\n";
+				}
+				else {
+					issueString += current.getResolution() + "\n"; 
+				}
+
+				issueString += current.getNotesString();
+				fileWriter.println(issueString);
 			}
 			fileWriter.close();
 			

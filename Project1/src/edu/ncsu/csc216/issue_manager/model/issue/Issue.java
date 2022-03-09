@@ -491,7 +491,7 @@ public class Issue {
 		issueString += getSummary() + ",";
 		
 		if (getOwner() == null) {
-			issueString += "null,";
+			issueString += ",";
 		}
 		else {issueString += getOwner() + ",";
 		}
