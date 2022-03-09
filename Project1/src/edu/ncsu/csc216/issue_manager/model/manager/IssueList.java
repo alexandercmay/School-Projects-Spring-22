@@ -48,11 +48,19 @@ public class IssueList {
 	 */
 	public void addIssues(ArrayList<Issue> issues) {
 		for (int i = 0; i < issues.size(); i++) {
+			int id = issues.get(i).getIssueId();
 			if(i == 0) {
 				issueMasterList.add(issues.get(i));
 			}
 			else {
-			addIssue(issues.get(i));
+			for(int j = 0; j < issues.size(); j++) {
+				int currentId = issues.get(j).getIssueId();
+				if (id == currentId) {
+					return;
+				} else {
+					addIssue(issues.get(i));
+				}
+			}
 			}
 		}
 		// get id of last issue
