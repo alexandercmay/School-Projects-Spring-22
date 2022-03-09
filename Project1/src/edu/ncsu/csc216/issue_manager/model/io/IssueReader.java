@@ -37,6 +37,8 @@ public class IssueReader {
 				// tack a new line onto the end of each line
 				fileString += fileReader.nextLine() +  "\n";
 			}
+			
+
 			// done with reading in the file directly
 			fileReader.close();
 			// if the first line is not the format *x,x,x...
@@ -81,6 +83,7 @@ public class IssueReader {
 		try {
 			// grab the first line containing the fields
 			String firstLine = noteScanner.nextLine();
+			
 			// create a scanner for the first line
 			Scanner fieldScanner = new Scanner(firstLine);
 			// parse using commas
@@ -111,6 +114,7 @@ public class IssueReader {
 			// close the field scanner
 			fieldScanner.close();
 			
+			
 			// use the delimiter for getting notes
 			noteScanner.useDelimiter("\r?\n?[-]");
 			
@@ -118,8 +122,7 @@ public class IssueReader {
 			// while there are more notes
 			while(noteScanner.hasNext()) {
 				//add note to the notes list
-				String nextNote = noteScanner.next();
-				notes.add(nextNote.trim());
+				notes.add(noteScanner.next().trim());
 			}
 			
 			// create a new issue from the data 

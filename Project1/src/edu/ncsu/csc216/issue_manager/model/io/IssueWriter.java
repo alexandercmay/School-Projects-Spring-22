@@ -27,7 +27,7 @@ public class IssueWriter {
 		try {
 			PrintStream fileWriter = new PrintStream(new File(filename));
 			for (int i = 0; i < issue.size(); i++) {
-			    fileWriter.println(issue.get(i).toString());
+			    fileWriter.println(issue.get(i).toString().trim());
 			}
 			fileWriter.close();
 			
