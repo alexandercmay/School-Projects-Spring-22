@@ -110,11 +110,19 @@ public class IssueList {
 	 * @throws IllegalArgumentException if null is passed as the issue type
 	 */
 	public ArrayList<Issue> getIssuesByType(String issue){
+		// if issue is null, throw
 		if (issue == null){
 			throw new IllegalArgumentException("Cannot be null");
-		} else {
+		}
+
+		// if the type is bug or enhancement
+		else  if (issue.equalsIgnoreCase(IssueType.BUG.toString()) 
+				|| issue.equalsIgnoreCase(IssueType.ENHANCEMENT.toString())){
+			// create an array to contain the specified issue
 			ArrayList<Issue> specIssue = new ArrayList<Issue>();
+			// iterate through the issue master list
 			for(int i = 0; i < issueMasterList.size(); i++) {
+				// get the type of the current issue as a string and compare to the parameter
 				String type = issueMasterList.get(i).getIssueType();
 				if (type.equalsIgnoreCase(issue)) {
 					specIssue.add(issueMasterList.get(i));
@@ -122,6 +130,11 @@ public class IssueList {
 			}
 			return specIssue;
 			}
+		// otherwise return an empty array of issues 
+		else {
+			ArrayList<Issue> emptyIssueList = new ArrayList<Issue>();
+			return emptyIssueList; 
+		}
 	}
 	
 	/**
