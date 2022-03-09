@@ -24,7 +24,7 @@ public class IssueWriter {
 	 * @param issue     the ArrayList of Issues to save to the file
 	 * @throws IllegalArgumentException if the file cannot be saved
 	 */
-	public static void writeIssuesToFile(String filename, ArrayList<Issue> issue) {
+	public static void writeIssuesToFile(String filename, List<Issue> issue) {
 		try {
 			PrintStream fileWriter = new PrintStream(new File(filename));
 			for (int i = 0; i < issue.size(); i++) {
