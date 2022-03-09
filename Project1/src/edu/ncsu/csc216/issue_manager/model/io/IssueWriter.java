@@ -4,7 +4,6 @@ package edu.ncsu.csc216.issue_manager.model.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.ncsu.csc216.issue_manager.model.issue.Issue;

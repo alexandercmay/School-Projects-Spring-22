@@ -1,7 +1,6 @@
 package edu.ncsu.csc216.issue_manager.model.issue;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
@@ -221,7 +220,7 @@ public class Issue {
 			}
 		}
 		// if ""
-		else if (owner == "" || owner == null || "null".equals(owner)) {
+		else if ("".equals(owner) || owner == null || "null".equals(owner)) {
 			this.owner = null;
 		}
 		
@@ -276,7 +275,7 @@ public class Issue {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 		// new state with resolution
-		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && (resolution != null && resolution != "" )){
+		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && resolution != null && !"".equals(resolution)){
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
 		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && "FIXED".equalsIgnoreCase(resolution)) {
@@ -289,7 +288,7 @@ public class Issue {
 //			return;
 //		} 
 		else if (resolution == null || "".equals(resolution)) {
-			resolution = null;
+			this.resolution = null;
 			return;
 		}
 		// otherwise determine the resolution type
@@ -357,7 +356,7 @@ public class Issue {
 	 * @return resolution as a String
 	 */
 	public String getResolution() {
-		String resString = "";
+
 		// return a string "" if state is new
 		if (state.getStateName().equals(NEW_NAME)) {
 			return null;
@@ -766,8 +765,7 @@ public class Issue {
 			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
-			 // the resolution as a variable
-			 Resolution res = c.getResolution();
+
 			 // if fix is correct
 			 if (cmd == CommandValue.VERIFY) {
 				 state = closedState;
@@ -823,8 +821,7 @@ public class Issue {
 			 try {
 			 // the command as a variable 
 			 CommandValue cmd = c.getCommand();
-			 // the resolution as a variable
-			 Resolution res = c.getResolution();
+
 			 
 			 // if working with a bug
 			 if (issueType == IssueType.BUG) {

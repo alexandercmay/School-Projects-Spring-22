@@ -1,6 +1,6 @@
 package edu.ncsu.csc216.issue_manager.model.manager;
 
-import java.util.ArrayList;
+
 
 import edu.ncsu.csc216.issue_manager.model.command.Command;
 import edu.ncsu.csc216.issue_manager.model.io.IssueReader;
