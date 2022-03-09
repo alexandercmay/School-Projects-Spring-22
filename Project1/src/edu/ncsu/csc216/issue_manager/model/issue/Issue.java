@@ -279,6 +279,9 @@ public class Issue {
 		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && (resolution != null && resolution != "" )){
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
+		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && "FIXED".equalsIgnoreCase(resolution)) {
+			throw new IllegalArgumentException("Invalid resolution for type.");
+		}
 //		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
 //			return;
 //		} 
