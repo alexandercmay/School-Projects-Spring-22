@@ -391,10 +391,7 @@ public class Issue {
 	 * @return the owner as a String
 	 */
 	public String getOwner() {
-		if(owner == null || "".equals(owner)) {
-			return "null";
-		}
-		else return owner;
+		return owner;
 	}
 	
 	/**
@@ -487,14 +484,14 @@ public class Issue {
 	@Override
 	public String toString() {
 		String issueString = "";
-		issueString += "* ";
+		issueString += "*";
 		issueString += getIssueId() + ",";
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
 		issueString += getSummary() + ",";
 		
 		if (getOwner() == null) {
-			issueString += ",";
+			issueString += "null,";
 		}
 		else {issueString += getOwner() + ",";
 		}
