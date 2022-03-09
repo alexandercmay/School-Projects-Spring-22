@@ -390,7 +390,7 @@ class IssueTest {
 		Issue issue4 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
 		Command command4 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
 		issue4.update(command4);
-		assertTrue(null == issue4.getResolution());
+		assertEquals(null, issue4.getResolution());
 		
 		// bad bug command
 		Issue issue5 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
@@ -401,7 +401,7 @@ class IssueTest {
 		Issue issue6 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);
 		Command command6 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
 		issue6.update(command6);
-		assertTrue(null == issue6.getResolution());
+		assertEquals(null, issue6.getResolution());
 		
 		// bad enhancement command
 		Issue issue7 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);
