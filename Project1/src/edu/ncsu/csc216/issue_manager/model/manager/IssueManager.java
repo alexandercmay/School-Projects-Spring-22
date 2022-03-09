@@ -108,8 +108,13 @@ public class IssueManager {
 	 * Returns the issues where rows are Issues and columns are   0: ID   1: state name  2: type  3: summary
 	 * @param issue the String representing the issue type 
 	 * @return return a 2D Object array containing issues of a certain type
+	 * @throws IllegalArgumentException if issue is null
 	 */
 	public Object[][] getIssueListAsArrayByIssueType(String issue){
+		// check to ensure issue is not null
+		if (issue == null) {
+			throw new IllegalArgumentException("Invalid issue");
+		}
 		// create a counter 
 		int typeCounter = 0;
 		// find number of issue type
@@ -162,6 +167,12 @@ public class IssueManager {
 	 */
 	public void deleteIssueById(int id) {
 		issueList.deleteIssueById(id);
+		for(int i = 0; i < issues.size(); i ++) {
+			if (id == issues.get(i).getIssueId()) {
+				issues.remove(i);
+			}
+		}
+		
 	}
 	
 	/**

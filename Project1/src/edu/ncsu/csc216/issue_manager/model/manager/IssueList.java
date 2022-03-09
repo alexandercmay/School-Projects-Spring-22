@@ -75,7 +75,9 @@ public class IssueList {
 	 * @param issue the issue object to add to the list
 	 */
 	private void addIssue(Issue issue) {
+		// initialize a counter
 		int i = 0;
+		// while i is less than the size (to prevent NPE) and while the parameter's id is greater than the current id
 		while(i < issueMasterList.size() && issue.getIssueId() > issueMasterList.get(i).getIssueId()) {
 			i++;
 		}
