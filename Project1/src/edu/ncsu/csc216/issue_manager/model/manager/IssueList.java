@@ -147,7 +147,10 @@ public class IssueList {
 	 * @param command   the command the user wants to execute upon the issue
 	 */
 	public void executeCommand(int id, Command command) {
-		getIssueById(id).update(command);
+		if(getIssueById(id) != null) {
+			getIssueById(id).update(command);
+		}
+		
 	}
 	
 	/**
