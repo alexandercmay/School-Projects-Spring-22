@@ -285,11 +285,21 @@ class IssueTest {
 		// throw exception when enhancement is worksforme
 		// new enhancement in working state
 		Issue issue3 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", false, "", notes);
-		
 		// move the issue (enhancement) to verifying
 		Command command3 = new Command(CommandValue.RESOLVE, "alex", Resolution.WORKSFORME, "yeah its fixed");
 		assertThrows(UnsupportedOperationException.class, () -> issue3.update(command3));
 		
+		// bad enhancement invalid command
+		Issue issue4 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", false, "", notes);
+		Command command4 = new Command(CommandValue.REOPEN, "alex", Resolution.WORKSFORME, "yeah its fixed");
+		assertThrows(UnsupportedOperationException.class, () -> issue4.update(command4));
+		
+		//  enhancement valid resolution
+		Issue issue5 = new Issue (1, "WORKING", "ENHANCEMENT", "this is a buglem", "alex", false, "", notes);
+		Command command5 = new Command(CommandValue.RESOLVE, "alex", Resolution.WONTFIX, "yeah its fixed");
+		issue5.update(command5);
+		assertTrue("CLOSED".equalsIgnoreCase(issue5.getStateName()));
+	
 		
 	}
 	
@@ -375,6 +385,28 @@ class IssueTest {
 		Command command3 = new Command(CommandValue.REOPEN, "", null, "yeah this isnt fixed");
 		issue3.update(command3);
 		assertTrue(issue3.getStateName().equalsIgnoreCase("confirmed"));
+		
+		// unconfirmed bug no owner
+		Issue issue4 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
+		Command command4 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
+		issue4.update(command4);
+		assertTrue(null == issue4.getResolution());
+		
+		// bad bug command
+		Issue issue5 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
+		Command command5 = new Command(CommandValue.VERIFY, "", Resolution.FIXED, "needs to be opened");
+		assertThrows(UnsupportedOperationException.class, () -> issue5.update(command5));
+	
+		// unconfirmed enhancement no owner
+		Issue issue6 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);
+		Command command6 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
+		issue6.update(command6);
+		assertTrue(null == issue6.getResolution());
+		
+		// bad enhancement command
+		Issue issue7 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);
+		Command command7 = new Command(CommandValue.VERIFY, "", Resolution.FIXED, "needs to be opened");
+		assertThrows(UnsupportedOperationException.class, () -> issue7.update(command7));
 	}
 	
 }

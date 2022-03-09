@@ -124,6 +124,16 @@ class IssueManagerTest {
 		assertEquals(manager.getIssueListAsArray().length, 6);
 	}
 	
+	/**
+	 * Test delete issue
+	 */
+	@Test
+	public void testDeleteIssueById() {
+		manager = IssueManager.getInstance();
+		manager.loadIssuesFromFile(validTestFile);
+		manager.deleteIssueById(1);
+		assertEquals(manager.getIssueListAsArray().length, 4);
+	}
 
 	/**
 	 * Helper method to compare two files for the same contents

@@ -17,6 +17,15 @@ import edu.ncsu.csc216.issue_manager.model.issue.Issue;
  *
  */
 class IssueReaderTest {
+	
+	/**
+	 * Test constructor
+	 */
+	@Test
+	public void testConstructor() {
+		IssueReader reader = new IssueReader();
+		assertTrue(reader instanceof IssueReader);
+	}
 
 	/** Valid course records */
 	private final String validTestFile = "test-files/issue_records1.txt";

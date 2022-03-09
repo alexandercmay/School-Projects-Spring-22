@@ -22,6 +22,14 @@ class IssueWriterTest {
 	private final String validTestFile = "test-files/issue_records1.txt";
 
 	/**
+	 * Tests constructor 
+	 */
+	@Test
+	public void testConstructor() {
+		IssueWriter writer = new IssueWriter();
+		assertTrue(writer instanceof IssueWriter);
+	}
+	/**
 	 * Tests that a file is written correctly
 	 */
 	@Test
