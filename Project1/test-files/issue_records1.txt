@@ -1,5 +1,5 @@
 *1,New,Enhancement,Issue description,,false,
-[New] Note 1
+-[New] Note 1
 *3,Confirmed,Bug,Issue description,,true,
 -[New] Note 1
 -[Confirmed] Note 2

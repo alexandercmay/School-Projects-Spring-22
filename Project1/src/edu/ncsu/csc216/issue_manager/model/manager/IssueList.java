@@ -75,24 +75,11 @@ public class IssueList {
 	 * @param issue the issue object to add to the list
 	 */
 	private void addIssue(Issue issue) {
-		// loop through the master list
-		for(int i = 0; i < issueMasterList.size(); i++) {
-			int id = issue.getIssueId();
-			int imId = issueMasterList.get(i).getIssueId();
-			
-			if (i == issueMasterList.size() - 1) {
-				break;
-			}  
-			else if (imId < id) {
-				continue;
-			} 
-			else if (imId == id) {
-				return;
-			} else if (imId > id) {
-				issueMasterList.add(issue);
-			}
+		int i = 0;
+		while(i < issueMasterList.size() && issue.getIssueId() > issueMasterList.get(i).getIssueId()) {
+			i++;
 		}
-		issueMasterList.add(issue);
+		issueMasterList.add(i, issue);
 	}
 	
 	/**

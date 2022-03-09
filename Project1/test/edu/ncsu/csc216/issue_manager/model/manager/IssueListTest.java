@@ -27,12 +27,19 @@ class IssueListTest {
 	@Test
 	public void testAddIssuesFromList() throws FileNotFoundException {
 		
+		//load in from valid file
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// create a new issue
 		Issue issue10 = new Issue(10, IssueType.BUG, "summary", "note");
+		// add the issue
 		issues.add(issue10);
+		// create a new issue list
 		IssueList il = new IssueList();
+		// add the issue array to the list
 		il.addIssues(issues);
+		// create a local array of the issues from issueList for checking values
 		ArrayList<Issue> issList = il.getIssues();
+		
 		assertEquals(issList.get(0).getIssueId(), 1);
 		assertEquals(issList.get(3).getIssueId(), 10);
 		assertEquals(issList.get(4).getIssueId(), 14);
