@@ -22,9 +22,7 @@ public class IssueManager {
 
 	/** IssueList **/
 	private IssueList issueList = new IssueList();
-	
-	/** The list of issues **/
-	private ArrayList<Issue> issues = issueList.getIssues();
+
 	
 	/**
 	 * The constructor for the IssueManager
@@ -56,7 +54,7 @@ public class IssueManager {
 		// exception may happen when writing a file
 		try {
 			// write issues to file
-			IssueWriter.writeIssuesToFile(filename, issues);
+			IssueWriter.writeIssuesToFile(filename, issueList.getIssues());
 		}
 		catch (Exception e){
 			throw new IllegalArgumentException("saveIssuesToFIle exception");
@@ -72,7 +70,7 @@ public class IssueManager {
 		// exception may happen when processing file
 		try {
 			// populate issueList with the reader
-			issues = IssueReader.readIssuesFromFile(filename);
+			issueList.addIssues(IssueReader.readIssuesFromFile(filename));
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException("loadIssuesFromFile exception");
@@ -84,7 +82,7 @@ public class IssueManager {
 	 */
 	public void createNewIssueList() {
 		// set the issueList to empty
-		issues = new ArrayList<Issue>();
+		issueList = new IssueList();
 	}
 	
 	/**
@@ -94,10 +92,10 @@ public class IssueManager {
 	public Object[][] getIssueListAsArray(){
 		// create an array of objects storing elements of issues
 		// instantiate array
-		Object[][] issueArray = new Object[issues.size()][4];
+		Object[][] issueArray = new Object[issueList.getIssues().size()][4];
 		
-		for(int i = 0; i < issues.size(); i++) {
-			Issue currentIssue = issues.get(i);
+		for(int i = 0; i < issueList.getIssues().size(); i++) {
+			Issue currentIssue = issueList.getIssues().get(i);
 			issueArray[i][0] = currentIssue.getIssueId();
 			issueArray[i][1] = currentIssue.getStateName();
 			issueArray[i][2] = currentIssue.getIssueType();
@@ -120,8 +118,8 @@ public class IssueManager {
 		// create a counter 
 		int typeCounter = 0;
 		// find number of issue type
-		for (int i = 0; i < issues.size(); i++) {
-			if (issues.get(i).getIssueType().equalsIgnoreCase(issue)) {
+		for (int i = 0; i < issueList.getIssues().size(); i++) {
+			if (issueList.getIssues().get(i).getIssueType().equalsIgnoreCase(issue)) {
 				typeCounter++;
 			}
 		}
@@ -131,8 +129,8 @@ public class IssueManager {
 		
 		// keep track of which entry you should be in
 		int counter = 0;
-		for(int i = 0; i < issues.size(); i++) {
-			Issue currentIssue = issues.get(i);
+		for(int i = 0; i < issueList.getIssues().size(); i++) {
+			Issue currentIssue = issueList.getIssues().get(i);
 			if(currentIssue.getIssueType().equalsIgnoreCase(issue)) {
 				issueArray[counter][0] = currentIssue.getIssueId();
 				issueArray[counter][1] = currentIssue.getStateName();
@@ -150,7 +148,6 @@ public class IssueManager {
 	 * @return the Issue tied to the specified ID
 	 */
 	public Issue getIssueById(int id) {
-		issueList.addIssues(issues);
 		return issueList.getIssueById(id);
 	}
 	
@@ -169,11 +166,6 @@ public class IssueManager {
 	 */
 	public void deleteIssueById(int id) {
 		issueList.deleteIssueById(id);
-		for(int i = 0; i < issues.size(); i ++) {
-			if (id == issues.get(i).getIssueId()) {
-				issues.remove(i);
-			}
-		}
 		
 	}
 	
