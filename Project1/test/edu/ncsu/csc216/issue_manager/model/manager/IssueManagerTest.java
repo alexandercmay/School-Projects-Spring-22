@@ -107,9 +107,9 @@ class IssueManagerTest {
 	public void testCreateNewIssueList() {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
-		assertTrue(manager.getIssueListAsArray().length == 5);
+		assertEquals(manager.getIssueListAsArray().length, 5);
 		manager.createNewIssueList();
-		assertTrue(manager.getIssueListAsArray().length == 0);
+		assertEquals(manager.getIssueListAsArray().length, 0);
 	}
 	
 	/**
@@ -119,9 +119,9 @@ class IssueManagerTest {
 	public void testAddIssueToList() {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
-		assertTrue(manager.getIssueListAsArray().length == 5);
+		assertEquals(manager.getIssueListAsArray().length, 5);
 		manager.addIssueToList(IssueType.BUG, "a bug to be sure", "a note to be not empty");
-		assertTrue(manager.getIssueListAsArray().length == 6);
+		assertEquals(manager.getIssueListAsArray().length, 6);
 	}
 	
 
