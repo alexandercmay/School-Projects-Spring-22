@@ -42,7 +42,6 @@ class IssueReaderTest {
 	@Test
 	public void testReadInvalidCourseRecords() throws FileNotFoundException {
 		ArrayList<Issue> issues;
-		issues = IssueReader.readIssuesFromFile(invalidTestFile);
-		assertEquals(0, issues.size());
+		assertThrows(IllegalArgumentException.class, () -> IssueReader.readIssuesFromFile(invalidTestFile));
 	}
 }

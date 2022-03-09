@@ -61,7 +61,7 @@ public class IssueReader {
 		catch (Exception e) {
 			// if an error is caught, clear the list of issues that were not erroneous
 			issues.clear();
-			//throw new IllegalArgumentException("Unable to load file.");
+			throw new IllegalArgumentException("Unable to load file.");
 		}
 		// return the array of issues
 		return issues;
@@ -115,16 +115,19 @@ public class IssueReader {
 			fieldScanner.close();
 			
 			
+			
 			// use the delimiter for getting notes
 			noteScanner.useDelimiter("\r?\n?[-]");
 			
-
+		
 			// while there are more notes
 			while(noteScanner.hasNext()) {
 				//add note to the notes list
 				notes.add(noteScanner.next().trim());
+
 			}
-			
+
+
 			// create a new issue from the data 
 			Issue issueFromString = new Issue(id, state, type, summary, owner, confirmed, resolution, notes);
 			// close the issueCreator scanner

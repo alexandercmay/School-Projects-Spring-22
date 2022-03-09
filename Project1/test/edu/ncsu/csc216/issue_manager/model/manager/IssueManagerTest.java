@@ -92,10 +92,10 @@ class IssueManagerTest {
 	public void testSaveIssueToFile() {
 		manager = IssueManager.getInstance();
 		manager.loadIssuesFromFile(validTestFile);
-		manager.saveIssuesToFile("actFile");
+		manager.saveIssuesToFile("test-files/actFile.txt");
 		Object[][] actual = manager.getIssueListAsArray();
 		assertEquals(actual.length, 5);
- 		checkFiles(expFile, "actFile");
+ 		checkFiles(expFile, "test-files/actFile.txt");
 		
 	}
 	
