@@ -37,9 +37,13 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testGetIssueListAsArray() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// create a new object array using getIssueListAsArray
 		Object[][] testArray = manager.getIssueListAsArray();
+		// confirm elements of array are as expected
 		assertSame(testArray.length, 5);
 		assertTrue(testArray[1][0].equals(3));
 		assertTrue(testArray[2][3].equals("Issue description"));
@@ -50,9 +54,13 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testGetIssueListAsArrayByIssueType() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// create object array of just bugs
 		Object[][] testArray = manager.getIssueListAsArrayByIssueType("bug");
+		// confirm elements of array are as expected
 		assertSame(testArray.length, 2);
 		assertTrue(testArray[0][0].equals(3));
 		assertTrue(testArray[1][3].equals("Issue description"));
@@ -64,8 +72,11 @@ class IssueManagerTest {
 	@Test
 	public void testgetIssueById() {
 		ArrayList<Issue> issues = IssueReader.readIssuesFromFile(validTestFile);
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// confirm the correct issue was grabbed
 		Issue issue0 = issues.get(0);
 		assertEquals(issue0.getIssueId(), manager.getIssueById(1).getIssueId());
 	}
@@ -78,8 +89,11 @@ class IssueManagerTest {
 		
 		// confirm the bug
 		Command command1 = new Command(CommandValue.RESOLVE, "", Resolution.WONTFIX, "lets get working on this bug");
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// confirm the issue's state was updated correctly 
 		manager.executeCommand(3, command1);
 		assertTrue(manager.getIssueById(3).getStateName().equalsIgnoreCase("CLOSED"));
 		
@@ -91,11 +105,16 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testSaveIssueToFile() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// save issues to file
 		manager.saveIssuesToFile("test-files/actFile.txt");
+		// check that the size of the issue list in issue manager is correct
 		Object[][] actual = manager.getIssueListAsArray();
 		assertEquals(actual.length, 5);
+		// check the file was saved correctly 
  		checkFiles(expFile, "test-files/actFile.txt");
 		
 	}
@@ -105,10 +124,14 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testCreateNewIssueList() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// check that the size of the issue list in issue manager is correct
 		assertEquals(manager.getIssueListAsArray().length, 5);
 		manager.createNewIssueList();
+		// check that the size of the issue list in issue manager is correct
 		assertEquals(manager.getIssueListAsArray().length, 0);
 	}
 	
@@ -117,10 +140,14 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testAddIssueToList() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
+		// check that the size of the issue list in issue manager is correct
 		assertEquals(manager.getIssueListAsArray().length, 5);
 		manager.addIssueToList(IssueType.BUG, "a bug to be sure", "a note to be not empty");
+		// check that the size of the issue list in issue manager is correct
 		assertEquals(manager.getIssueListAsArray().length, 6);
 	}
 	
@@ -129,9 +156,12 @@ class IssueManagerTest {
 	 */
 	@Test
 	public void testDeleteIssueById() {
+		// new instance of manager
 		manager = IssueManager.getInstance();
+		// load issues from valid file
 		manager.loadIssuesFromFile(validTestFile);
 		manager.deleteIssueById(1);
+		// check that the size of the issue list in issue manager is correct
 		assertEquals(manager.getIssueListAsArray().length, 4);
 	}
 

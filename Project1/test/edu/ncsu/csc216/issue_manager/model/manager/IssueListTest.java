@@ -42,7 +42,7 @@ class IssueListTest {
 		il.addIssues(issues);
 		// create a local array of the issues from issueList for checking values
 		ArrayList<Issue> issList = il.getIssues();
-		
+		// assert issues have correct states via id
 		assertEquals(issList.get(0).getIssueId(), 1);
 		assertEquals(issList.get(3).getIssueId(), 10);
 		assertEquals(issList.get(4).getIssueId(), 14);

@@ -20,6 +20,7 @@ public class IssueReader {
 	 * Reads issues from a file and adds to list as long as there are no errors in processing
 	 * @param filename the name of the file to read issues from
 	 * @return a non-ordered ArrayList of Issues based on the contents of the file
+	 * @throws IllegalArgumentException if first line does not begin with '*'
 	 * @throws IllegalArgumentException if there are any errors reading in a file
 	 */
 	public static ArrayList<Issue> readIssuesFromFile(String filename) {
@@ -71,6 +72,7 @@ public class IssueReader {
 	 * A helper class to process lines and tokens as information specific to Issues
 	 * @param issue the string containing the issue to be parsed
 	 * @return the Issue object once the String has been parsed
+	 * @throws IllegalArgumentException if there is no id int
 	 * @throws IllegalArgumentException if there are too many tokens in the field line
 	 * @throws IllegalArgumnetException if the issue cannot be created
 	 */
@@ -94,7 +96,7 @@ public class IssueReader {
 				fieldScanner.close();
 				throw new IllegalArgumentException("Invalid data");
 			}
-			
+			// set field states
 			String state = fieldScanner.next();
 			String type = fieldScanner.next();
 			String summary = fieldScanner.next();

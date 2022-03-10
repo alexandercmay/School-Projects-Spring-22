@@ -32,6 +32,7 @@ public class IssueList {
 	 * @param summary  the summary of the issue as a string 
 	 * @param note     the note tied to the issue as a string
 	 * @return id      returns the id of the issue as an int
+	 * @throws IllegalArgumentException if the issue cannot be created due to its state
 	 */
 	public int addIssue(IssueType issue, String summary, String note) {
 		Issue newIssue = new Issue(counter, issue, summary, note);
@@ -42,7 +43,7 @@ public class IssueList {
 	
 	/**
 	 * Adds issues (plural) to the list based on a passed through ArrayList.
-	 * Adds the issues in a sorted order. 
+	 * Adds the issues in a sorted order.
 	 * Counter is set to last id + 1
 	 * @param issues the ArrayList of issues being read in 
 	 */
@@ -145,6 +146,7 @@ public class IssueList {
 	 * Executes a desired command based on the id of the issue and the specified command
 	 * @param id        the ID of the issue sought after
 	 * @param command   the command the user wants to execute upon the issue
+	 * @throws UnsupportedOperationException if the command is invalid for the issue's state
 	 */
 	public void executeCommand(int id, Command command) {
 		if(getIssueById(id) != null) {
@@ -158,6 +160,7 @@ public class IssueList {
 	 * @param id the ID attached to the issue the user is seeking to delete
 	 */
 	public void deleteIssueById(int id) {
+		// iterate through list of issues and remove the ith spot if it matches the specified id
 		for(int i = 0; i < issueMasterList.size(); i++) {
 			if (id == issueMasterList.get(i).getIssueId()) {
 				issueMasterList.remove(i);

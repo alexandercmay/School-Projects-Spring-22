@@ -19,9 +19,11 @@ class CommandTest {
 	 */
 	@Test
 	public void testValidCommand() {
+		// creating a new valid command should not throw
 		Command command  = assertDoesNotThrow(
 				() -> new Command(CommandValue.CONFIRM, "alex", Resolution.DUPLICATE, "duplicate bug"),
 				"should not throw exception"); 
+		// prove that the command's states are correct
 		assertSame(command.getCommand(), CommandValue.CONFIRM);
 		assertSame(command.getResolution(), Resolution.DUPLICATE);
 		assertTrue("alex".equals(command.getOwnerId())); 

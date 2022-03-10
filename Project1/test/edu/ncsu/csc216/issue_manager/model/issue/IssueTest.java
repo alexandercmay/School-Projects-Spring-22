@@ -218,10 +218,15 @@ class IssueTest {
 	 */
 	@Test
 	public void testToString() {
+		// create an expected toString
 		String exToString = "* 1,New,Enhancement,enhance image!,,false,\n-[New] Note 1\n";
+		// create a new array list for notes
 		ArrayList<String> notes = new ArrayList<String>();
+		// add the note to notes
 		notes.add("[New] Note 1");
+		// create a new issue with the notes array
 		Issue issue = new Issue(1, "NEW", "Enhancement", "enhance image!", "", false, "", notes);
+		// make sure the toString matches the expected
 		assertEquals(exToString, issue.toString());
 	}
 	
@@ -390,7 +395,7 @@ class IssueTest {
 		Issue issue4 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
 		Command command4 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
 		issue4.update(command4);
-		assertEquals(null, issue4.getResolution());
+		assertTrue(null == issue4.getResolution());
 		
 		// bad bug command
 		Issue issue5 = new Issue (1, "CLOSED", "BUG", "buglem", "", false, "FIXED", notes);
@@ -401,7 +406,7 @@ class IssueTest {
 		Issue issue6 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);
 		Command command6 = new Command(CommandValue.REOPEN, "", Resolution.FIXED, "needs to be opened");
 		issue6.update(command6);
-		assertEquals(null, issue6.getResolution());
+		assertTrue(null == issue6.getResolution());
 		
 		// bad enhancement command
 		Issue issue7 = new Issue (1, "CLOSED", "ENHANCEMENT", "buglem", "", false, "FIXED", notes);

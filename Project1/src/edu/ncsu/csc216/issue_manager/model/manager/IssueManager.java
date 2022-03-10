@@ -23,7 +23,6 @@ public class IssueManager {
 	/** IssueList **/
 	private IssueList issueList = new IssueList();
 
-	
 	/**
 	 * The constructor for the IssueManager
 	 */
@@ -93,7 +92,7 @@ public class IssueManager {
 		// create an array of objects storing elements of issues
 		// instantiate array
 		Object[][] issueArray = new Object[issueList.getIssues().size()][4];
-		
+		// each row is a new issue, column 0 = id, column 1 = state, column 2 = type, column 3 = summary
 		for(int i = 0; i < issueList.getIssues().size(); i++) {
 			Issue currentIssue = issueList.getIssues().get(i);
 			issueArray[i][0] = currentIssue.getIssueId();
@@ -132,6 +131,7 @@ public class IssueManager {
 		for(int i = 0; i < issueList.getIssues().size(); i++) {
 			Issue currentIssue = issueList.getIssues().get(i);
 			if(currentIssue.getIssueType().equalsIgnoreCase(issue)) {
+				// each row is a new issue, column 0 = id, column 1 = state, column 2 = type, column 3 = summary
 				issueArray[counter][0] = currentIssue.getIssueId();
 				issueArray[counter][1] = currentIssue.getStateName();
 				issueArray[counter][2] = currentIssue.getIssueType();
@@ -155,6 +155,7 @@ public class IssueManager {
 	 * Executes a desired command based on the id of the issue and the specified command
 	 * @param id        the ID of the issue sought after
 	 * @param command   the command the user/GUI wants to execute upon the issue
+	 * @throws UnsupportedOperationException if the command cannot be executed due to the issue's state
 	 */
 	public void executeCommand(int id, Command command) {
 		getIssueById(id).update(command);
@@ -174,6 +175,7 @@ public class IssueManager {
 	 * @param issue    the type of issue that you want to add (eg enhancement, bug)
 	 * @param summary  the summary of the issue as a string 
 	 * @param note     the note tied to the issue as a string
+	 * @throws IllegalArgumentException if the issue is not in a valid state
 	 */
 	public void addIssueToList(IssueType issue, String summary, String note) {
 		issueList.addIssue(issue, summary, note);

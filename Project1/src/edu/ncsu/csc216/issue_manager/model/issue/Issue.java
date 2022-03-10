@@ -7,7 +7,8 @@ import edu.ncsu.csc216.issue_manager.model.command.Command.CommandValue;
 import edu.ncsu.csc216.issue_manager.model.command.Command.Resolution;
 
 /**
- * The Issue class that contains the 5 states in addition to the object properties and fields of Issues
+ * The Issue class that contains the 5 states in addition to the object properties and fields of Issues.
+ * Maintains the issue's state name, type, owner, confirmation, and notes array.
  * @author Alexander May
  *
  */
@@ -69,6 +70,7 @@ public class Issue {
 	 * @param summary      the summary of the Issue
 	 * @param note         the Issue's note
 	 * @throws IllegalArgumentException if any of the parameters are null or empty string, or if the id is less than 1
+	 * or if the setters throw IAEs
 	 */
 	public Issue(int id, IssueType issueType, String summary, String note) {
 		// try to use Issue setters to set the fields 
@@ -187,6 +189,7 @@ public class Issue {
 	/**
 	 * The summary of the Issue
 	 * @param summary the summary as a String
+	 * @throws IllegalArgumentException if the summary contains a comma or is an empty string
 	 */
 	private void setSummary(String summary) {
 		// cannot contain a comma
@@ -201,6 +204,8 @@ public class Issue {
 	/**
 	 * Sets the Issue's owner
 	 * @param owner the Issue's owner as a String
+	 * @throws IllegalArgumentException if the state is working or verifying and there is no owner
+	 * @throws IllegalArgumentException if the state is new or confirmed and there is an owner
 	 */
 	private void setOwner(String owner) {
 		// working or verifying MUST have owner
@@ -233,7 +238,9 @@ public class Issue {
 	/**
 	 * Sets the state to confirmed (T/F)
 	 * @param confirmed the boolean value. True if confirmed. 
-	 * @throws IllegalArgumentException if enhancement or new while confirmed is true
+	 * @throws IllegalArgumentException if enhancement type or new state while confirmed is true
+	 * @throws IllegalArgumentException if a bug in the working state is not confirmed 
+	 * @throws IllegalArgumentException if the state is confirmed but it is not confirmed while being a bug
 	 */
 	private void setConfirmed(boolean confirmed) {
 		// if the type is enhancement, the state is new, and the confirmed is true, throw IAE
@@ -259,6 +266,8 @@ public class Issue {
 	 * @throws IllegalArgumentException if type is enhancement and resolution is works for me
 	 * @throws IllegalArgumentException if resolution is empty while in closed state
 	 * @throws IllegalArgumentException if resolution is not FIXED while in verifying
+	 * @throws IllegalArgumentException if resolution is not null or empty in new state
+	 * @throws IllegalArgumentException if confirmed with resolution of fixed
 	 * @throws IllegalArgumentException if the type is not WORKSFORME, DUPLICATE, WONTFIX, or FIXED
 	 */
 	private void setResolution(String resolution) {
@@ -281,12 +290,7 @@ public class Issue {
 		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && "FIXED".equalsIgnoreCase(resolution)) {
 			throw new IllegalArgumentException("Invalid resolution for type.");
 		}
-//		else if (state.getStateName().equalsIgnoreCase(NEW_NAME) && ("".equals(resolution) || null == resolution)) {
-//			return;
-//		} 
-//		else if (state.getStateName().equalsIgnoreCase(CONFIRMED_NAME) && ("".equals(resolution) || null == resolution)) {
-//			return;
-//		} 
+		// if resolution is null or empty string, return with resolution set to null
 		else if (resolution == null || "".equals(resolution)) {
 			this.resolution = null;
 			return;
@@ -310,6 +314,7 @@ public class Issue {
 	/**
 	 * Sets the Issue's notes
 	 * @param notes the ArrayList of notes in the form of String for an Issue
+	 * @throws IllegalArgumentException if the notes array is empty
 	 */
 	private void setNotes(ArrayList<String> notes) {
 		// if notes is empty
@@ -354,6 +359,7 @@ public class Issue {
 	/**
 	 * Gets the Issue's resolution
 	 * @return resolution as a String
+	 * @throws IllegalArgumentException is resolution is not null, empty, or an enum of Resolution
 	 */
 	public String getResolution() {
 
@@ -361,6 +367,7 @@ public class Issue {
 		if (state.getStateName().equals(NEW_NAME)) {
 			return null;
 		} 
+		// return null if resolution is null
 		else if (resolution == null) {
 			return null;
 		}
@@ -417,15 +424,15 @@ public class Issue {
 	 * @return a single String containing an Issue's notes
 	 */
 	public String getNotesString() {
+		// create a new empty string
 		String notesString = "";
+		// get the notes as an array
 		ArrayList<String> pnotes = getNotes();
+		// iterate through note array
 		for (int i = 0; i < pnotes.size(); i++) {
-
-			
+			// append a - in front of the string and a new line at the end
 			notesString += "-" + pnotes.get(i) + "\n";
-			
 			}
-
 		return notesString;
 	}
 	
@@ -443,7 +450,6 @@ public class Issue {
 	 * @throws IllegalArgumentException if the note is null or empty
 	 */
 	private void addNote(String note) {
-
 		// note cannot be null or empty
 		if (note == null || "".equals(note)) {
 			throw new IllegalArgumentException("Note must have script.");
@@ -458,6 +464,7 @@ public class Issue {
 	/**
 	 * The command to update an issue with
 	 * @param c the Command to update the issue with
+	 * @throws UnsupportedOperationException if the update is not valid
 	 */
 	public void update(Command c) {
 		state.updateState(c);
@@ -468,27 +475,32 @@ public class Issue {
 	 */
 	@Override
 	public String toString() {
+		// create a new empty string for amending 
 		String issueString = "";
+		// begin issue with a *
 		issueString += "* ";
+		// add all fields to first line
 		issueString += getIssueId() + ",";
 		issueString += getStateName() + ","; 
 		issueString += getIssueType() + ",";
 		issueString += getSummary() + ",";
-		
+		// if owner is null, do not print as null, instead print just the comma 
 		if (getOwner() == null) {
 			issueString += ",";
 		}
+		// otherwise print the owner and the comma
 		else {issueString += getOwner() + ",";
 		}
 		issueString += isConfirmed() + ",";
-		
+		// if resolution is null go ahead and print the new line
 		if (getResolution() == null) {
 			issueString += "\n";
 		}
+		// otherwise print the resolution then the new line
 		else {
 			issueString += getResolution() + "\n"; 
 		}
-
+		// add on the notes from the stored notes array 
 		issueString += getNotesString();
 		
 		return issueString;
@@ -541,10 +553,11 @@ public class Issue {
 		 /**
 		  * New can transition to working or confirmed or closed
 		  * @param c the Command to attempt to enact upon New
-		  * @throws UnsupportedOperationException if trying to assign an owner on a bug
-		  * @throws UnsupportedOperationException if trying to confirm an enhancement
-		  * @throws UnsupportedOperationException if trying to set resolution WORKSFORME to enhancement
-		  * @throws UnsupportedOperationException if trying to do anything except verify, confirm, or resolve
+		  * @throws UnsupportedOperationException if trying to do anything to a bug except resolving 
+		  * with a non fix resolution or confirming the bug
+		  * @throws UnsupportedOperationException if trying to do anything to an enhancement except 
+		  * assigning it or resolving (duplicate or wontfix)
+		  * @throws UnsupportedOperationException if any exceptions are caught 
 		  */
 		 @Override 
 		 public void updateState(Command c) {
@@ -624,7 +637,9 @@ public class Issue {
 		 /**
 		  * Working can transition to Closed or Verifying
 		  * @param c the Command to attempt to enact upon Working
-		  * @throws UnsupportedOperationException if trying to set worksforme to enhancement
+		  * @throws UnsupportedOperationException if working with a bug and not resolving it 
+		  * @throws UnsupportedOperationException if working with enhancement and not resolving (cannot use fixed resolution)
+		  * @throws UnsupportedOperationException if any exceptions are caught 
 		  */
 		 @Override 
 		 public void updateState(Command c) {
@@ -703,6 +718,7 @@ public class Issue {
 		  * Confirmed can transition to Working or Closed
 		  * @param c the Command to attempt to enact upon Confirmed
 		  * @throws UnsupportedOperationException if not trying to assign an owner or resolving with wontfix
+		  * @throws UnsupportedOperationException if any exceptions are caught 
 		  */
 		 @Override 
 		 public void updateState(Command c) {
@@ -759,6 +775,7 @@ public class Issue {
 		  * Verifying can transition to Working or Closed
 		  * @param c the Command to attempt to enact upon Verifying
 		  * @throws UnsupportedOperationException if not verifying or reopening
+		  * @throws UnsupportedOperationException if any exceptions are caught 
 		  */
 		 @Override 
 		 public void updateState(Command c) {
@@ -802,8 +819,6 @@ public class Issue {
 	 /**
 	  * Represents the "Closed" state that an issue can be in
 	  * @author Alexander May
-	  * @throws UnsupportedOperationException
-	  *
 	  */
 	 private class ClosedState implements IssueState {
 		 
@@ -814,6 +829,9 @@ public class Issue {
 		 /**
 		  * Closed can transition to Confirmed or New or Working
 		  * @param c the Command to attempt to enact upon Verifying
+		  * @throws UnsupportedOperationException if working with a bug and not reopening 
+		  * @throws UnsupportedOperationException if working with an enhancement and not reopening
+		  * @throws UnsupportedOperationException if any exceptions are caught 
 		  */
 		 @Override 
 		 public void updateState(Command c) {
